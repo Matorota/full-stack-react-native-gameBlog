@@ -1,5 +1,11 @@
 import { Stack } from "expo-router";
+import { ListingProvider } from "./contexts/ListingContext";
 import "./global.css";
+
 export default function RootLayout() {
-  return <Stack />;
+  return (
+    <ListingProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </ListingProvider>
+  );
 }
