@@ -11,21 +11,21 @@ async function testConnection() {
     const client = await MongoClient.connect(uri, {
       serverSelectionTimeoutMS: 5000,
     });
-    console.log("✅ Connected successfully!");
+    console.log(" Connected successfully!");
 
     const db = client.db("blogGames");
     const collection = db.collection("blogGames");
 
     const count = await collection.countDocuments();
-    console.log(`📊 Found ${count} documents in blogGames collection`);
+    console.log(` Found ${count} documents in blogGames collection`);
 
     const games = await collection.find({}).limit(3).toArray();
     console.log("First 3 games:", JSON.stringify(games, null, 2));
 
     await client.close();
-    console.log("✅ Test complete!");
+    console.log(" Test complete!");
   } catch (error) {
-    console.error("❌ Connection failed:", error.message);
+    console.error(" Connection failed:", error.message);
   }
 }
 

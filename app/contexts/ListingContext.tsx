@@ -49,7 +49,7 @@ type Action =
 const initialState: State = {
   listings: [],
   filteredListings: [],
-  selectedCategory: "all",
+  selectedCategory: Category.GAMES,
   searchQuery: "",
   currentUser: null,
   rememberMe: false,

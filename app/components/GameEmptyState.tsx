@@ -55,35 +55,36 @@ export default function GameEmptyState({ onAddListing }: GameEmptyStateProps) {
 
   return (
     <View className="flex-1 justify-center items-center px-8 py-20">
-      <Animated.View style={iconStyle} className="mb-6">
-        <View className="w-24 h-24 bg-gray-700 rounded-full items-center justify-center relative">
-          <Ionicons name="game-controller" size={48} color="#10B981" />
+      <Animated.View style={iconStyle} className="mb-8">
+        <View className="w-32 h-32 bg-slate-700 rounded-full items-center justify-center relative shadow-2xl">
+          <Ionicons name="game-controller" size={64} color="#10B981" />
 
-          <View className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-          <View className="absolute -bottom-1 -left-1 w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-300" />
+          <View className="absolute -top-2 -right-2 w-4 h-4 bg-emerald-400 rounded-full animate-pulse" />
+          <View className="absolute -bottom-2 -left-2 w-3 h-3 bg-teal-400 rounded-full animate-pulse delay-300" />
         </View>
       </Animated.View>
 
       {/* Title */}
-      <Text className="text-2xl font-bold text-white text-center mb-3">
-        Pradėk savo žaidimų kolekciją!
+      <Text className="text-3xl font-bold text-white text-center mb-4">
+        Start Your Game Collection!
       </Text>
 
       {/* Description */}
-      <Text className="text-gray-400 text-center text-base leading-6 mb-8">
-        Čia neradai ko ieškoji? Būk pirmasis ir sukurk savo žaidimo skelbimą!
+      <Text className="text-slate-400 text-center text-lg leading-7 mb-10">
+        No games found? Be the first to add your game and start building an
+        amazing collection!
       </Text>
 
       {/* Action Button */}
       <Animated.View style={buttonStyle}>
         <TouchableOpacity
           onPress={handleActionPress}
-          className="bg-green-500 px-8 py-4 rounded-xl flex-row items-center shadow-lg"
+          className="bg-gradient-to-r from-emerald-500 to-teal-500 px-10 py-5 rounded-2xl flex-row items-center shadow-2xl border-2 border-emerald-400"
           activeOpacity={0.9}
         >
-          <Ionicons name="add-circle" size={20} color="white" />
-          <Text className="text-white font-semibold ml-2 text-base">
-            Sukurti skelbimą
+          <Ionicons name="add-circle" size={24} color="white" />
+          <Text className="text-white font-bold ml-3 text-lg">
+            Add New Game
           </Text>
         </TouchableOpacity>
       </Animated.View>

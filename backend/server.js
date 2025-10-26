@@ -63,14 +63,14 @@ app.get("/api/games", async (req, res) => {
 
     const games = await collection.find(filter).toArray();
 
-    console.log(`📊 Retrieved ${games.length} games`);
+    console.log(` Retrieved ${games.length} games`);
     res.json({
       success: true,
       count: games.length,
       data: games,
     });
   } catch (error) {
-    console.error("❌ Error fetching games:", error);
+    console.error(" Error fetching games:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -97,7 +97,7 @@ app.get("/api/games/:id", async (req, res) => {
       data: game,
     });
   } catch (error) {
-    console.error("❌ Error fetching game:", error);
+    console.error(" Error fetching game:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -120,7 +120,7 @@ app.post("/api/games", async (req, res) => {
 
     const result = await collection.insertOne(gameData);
 
-    console.log("✅ Game created with ID:", result.insertedId);
+    console.log(" Game created with ID:", result.insertedId);
 
     res.status(201).json({
       success: true,
@@ -130,7 +130,7 @@ app.post("/api/games", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Error creating game:", error);
+    console.error(" Error creating game:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -161,14 +161,14 @@ app.put("/api/games/:id", async (req, res) => {
 
     const updatedGame = await collection.findOne({ _id: new ObjectId(id) });
 
-    console.log("✅ Game updated:", id);
+    console.log("Game updated:", id);
 
     res.json({
       success: true,
       data: updatedGame,
     });
   } catch (error) {
-    console.error("❌ Error updating game:", error);
+    console.error(" Error updating game:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -190,14 +190,14 @@ app.delete("/api/games/:id", async (req, res) => {
       });
     }
 
-    console.log("✅ Game deleted:", id);
+    console.log("Game deleted:", id);
 
     res.json({
       success: true,
       message: "Game deleted successfully",
     });
   } catch (error) {
-    console.error("❌ Error deleting game:", error);
+    console.error(" Error deleting game:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -219,7 +219,7 @@ app.get("/api/games/search/:query", async (req, res) => {
       })
       .toArray();
 
-    console.log(`🔍 Search for "${query}" found ${games.length} results`);
+    console.log(` Search for "${query}" found ${games.length} results`);
 
     res.json({
       success: true,
@@ -227,7 +227,7 @@ app.get("/api/games/search/:query", async (req, res) => {
       data: games,
     });
   } catch (error) {
-    console.error("❌ Error searching games:", error);
+    console.error(" Error searching games:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -263,7 +263,7 @@ app.get("/api/stats", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Error getting stats:", error);
+    console.error(" Error getting stats:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -276,8 +276,8 @@ const startServer = async () => {
   await connectToMongoDB();
 
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📡 API endpoints:`);
+    console.log(` Server running on http://localhost:${PORT}`);
+    console.log(` API endpoints:`);
     console.log(`   - GET    /api/health`);
     console.log(`   - GET    /api/games`);
     console.log(`   - GET    /api/games/:id`);

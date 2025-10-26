@@ -64,46 +64,43 @@ export default function MongoGamesPage() {
 
   return (
     <ScrollView
-      className="flex-1 bg-gray-50"
+      className="flex-1 bg-slate-50"
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <View className="p-6">
-        {/* Header */}
-        <View className="mb-6">
+      <View className="p-8">
+        <View className="mb-10">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="mb-4 self-start"
+            className="mb-6 self-start bg-slate-200 px-5 py-3 rounded-xl"
           >
-            <Text className="text-blue-500 text-lg">← Back</Text>
+            <Text className="text-slate-700 text-lg font-medium">← Back</Text>
           </TouchableOpacity>
-          <View className="flex-row justify-between items-center mb-2">
-            <Text className="text-3xl font-bold text-gray-800">
-              MongoDB Games
-            </Text>
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-4xl font-bold text-slate-800">My Games</Text>
             <TouchableOpacity
               onPress={() => router.push("/add-mongo-game")}
-              className="bg-blue-500 px-4 py-2 rounded-lg"
+              className="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 rounded-xl shadow-lg"
             >
-              <Text className="text-white font-semibold">+ Add Game</Text>
+              <Text className="text-white font-bold text-lg">+ Add Game</Text>
             </TouchableOpacity>
           </View>
-          <Text className="text-gray-600">
+          <Text className="text-slate-600 text-lg">
             {listings.length} games in your collection
           </Text>
         </View>
 
-        {/* Games List */}
         {listings.length === 0 ? (
           <View className="bg-white rounded-xl shadow-sm p-8 items-center">
-            <Text className="text-6xl mb-4">🎮</Text>
+            <View className="w-16 h-16 bg-gray-200 rounded-lg items-center justify-center mb-4">
+              <Text className="text-gray-400 text-lg">GAME</Text>
+            </View>
             <Text className="text-xl font-semibold text-gray-800 mb-2">
               No Games Yet
             </Text>
             <Text className="text-gray-600 text-center mb-6">
-              Start building your game collection by adding your first game to
-              MongoDB!
+              Start building your game collection by adding your first game!
             </Text>
             <TouchableOpacity
               onPress={() => router.push("/add-mongo-game")}
@@ -115,25 +112,27 @@ export default function MongoGamesPage() {
             </TouchableOpacity>
           </View>
         ) : (
-          <View className="space-y-4">
+          <View className="space-y-6">
             {listings.map((listing) => (
               <View
                 key={listing.id}
-                className="bg-white rounded-xl shadow-sm overflow-hidden"
+                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100"
               >
-                <View className="p-4">
+                <View className="p-6">
                   <View className="flex-row">
                     {/* Game Image */}
-                    <View className="w-20 h-20 mr-4">
+                    <View className="w-24 h-24 mr-5">
                       {listing.images && listing.images[0] ? (
                         <Image
                           source={{ uri: listing.images[0] }}
-                          className="w-full h-full rounded-lg"
+                          className="w-full h-full rounded-2xl"
                           resizeMode="cover"
                         />
                       ) : (
-                        <View className="w-full h-full bg-gray-200 rounded-lg items-center justify-center">
-                          <Text className="text-gray-400 text-2xl">🎮</Text>
+                        <View className="w-full h-full bg-slate-200 rounded-2xl items-center justify-center">
+                          <Text className="text-slate-400 text-sm font-medium">
+                            No Image
+                          </Text>
                         </View>
                       )}
                     </View>
@@ -163,18 +162,23 @@ export default function MongoGamesPage() {
                   </View>
 
                   {/* Action Buttons */}
-                  <View className="flex-row justify-end mt-4 space-x-2">
+                  <View className="flex-row justify-end mt-5 space-x-3">
                     <TouchableOpacity
                       onPress={() => router.push(`/edit-game/${listing.id}`)}
-                      className="bg-gray-100 px-4 py-2 rounded-lg"
+                      className="bg-slate-100 px-5 py-3 rounded-xl border border-slate-200"
                     >
-                      <Text className="text-gray-700 font-medium"> Edit</Text>
+                      <Text className="text-slate-700 font-semibold">
+                        {" "}
+                        Edit
+                      </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleDelete(listing)}
                       disabled={deleting === listing.id}
-                      className={`px-4 py-2 rounded-lg ${
-                        deleting === listing.id ? "bg-gray-300" : "bg-red-100"
+                      className={`px-5 py-3 rounded-xl ${
+                        deleting === listing.id
+                          ? "bg-slate-300"
+                          : "bg-red-100 border border-red-200"
                       }`}
                     >
                       {deleting === listing.id ? (
@@ -206,17 +210,6 @@ export default function MongoGamesPage() {
             ))}
           </View>
         )}
-
-        {/* Footer Info */}
-        <View className="mt-8 bg-green-50 rounded-lg p-4">
-          <Text className="text-green-800 font-semibold mb-1">
-            MongoDB Status
-          </Text>
-          <Text className="text-green-700 text-sm">
-            Connected to MongoDB Atlas. All changes are saved in real-time to
-            your database.
-          </Text>
-        </View>
       </View>
     </ScrollView>
   );

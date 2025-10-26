@@ -10,7 +10,8 @@ class GameHubMongoService {
     | "error" = "disconnected";
   private connectionError: string | null = null;
 
-  private baseUrl = process.env.EXPO_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
+  private baseUrl =
+    process.env.EXPO_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
 
   private constructor() {}
 
@@ -237,7 +238,7 @@ class GameHubMongoService {
     }
 
     try {
-      console.log("🗑️ Deleting game:", id);
+      console.log("Deleting game:", id);
 
       const response = await fetch(`${this.baseUrl}/games/${id}`, {
         method: "DELETE",
@@ -266,7 +267,7 @@ class GameHubMongoService {
     }
 
     try {
-      console.log("🔍 Searching games for:", query);
+      console.log("Searching games for:", query);
 
       const response = await fetch(
         `${this.baseUrl}/games/search/${encodeURIComponent(query)}`
@@ -279,7 +280,7 @@ class GameHubMongoService {
       const result = await response.json();
       const blogGames = result.data || [];
 
-      console.log(`📊 Found ${blogGames.length} matching games`);
+      console.log(`Found ${blogGames.length} matching games`);
 
       return blogGames.map((doc: any) => {
         const blogGame: BlogGame = {

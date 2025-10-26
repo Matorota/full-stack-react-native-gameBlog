@@ -1,5 +1,12 @@
-import React from "react";
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Animated, {
@@ -21,6 +28,8 @@ export default function GameListingCard({
 }: GameListingCardProps) {
   const router = useRouter();
   const { currentUser, deleteListing } = useListings();
+  const [expanded, setExpanded] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -68,10 +77,15 @@ export default function GameListingCard({
           text: "Delete",
           style: "destructive",
           onPress: async () => {
+            setDeleting(true);
             try {
               await deleteListing(listing.id);
+              Alert.alert("Success", "Game deleted successfully!");
             } catch (error) {
               Alert.alert("Error", "Failed to delete game.");
+            } finally {
+              setDeleting(false);
+              setExpanded(false);
             }
           },
         },
@@ -79,88 +93,121 @@ export default function GameListingCard({
     );
   };
 
+  const handleCardPress = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <Animated.View style={animatedStyle}>
       <TouchableOpacity
-        onPress={onPress}
+        onPress={handleCardPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden mb-4"
+        className="bg-slate-800 rounded-2xl shadow-lg border border-slate-700 overflow-hidden mb-4"
         activeOpacity={0.9}
       >
-        {/* Image Section */}
-        <View className="h-48 relative overflow-hidden">
-          {listing.images?.[0] ? (
-            <Image
-              source={{ uri: listing.images[0] }}
-              className="w-full h-full"
-              resizeMode="cover"
-            />
-          ) : (
-            <View className="w-full h-full bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 items-center justify-center">
-              <Ionicons name="game-controller" size={48} color="white" />
-              <Text className="text-white text-sm mt-2 font-medium opacity-90">
-                {listing.platform || "Gaming"}
-              </Text>
+        {/* Main Card Content */}
+        <View className="p-5">
+          <View className="flex-row">
+            {/* Game Image */}
+            <View className="w-20 h-20 mr-4">
+              {listing.images?.[0] ? (
+                <Image
+                  source={{ uri: listing.images[0] }}
+                  className="w-full h-full rounded-xl"
+                  resizeMode="cover"
+                />
+              ) : (
+                <View className="w-full h-full bg-slate-600 rounded-xl items-center justify-center">
+                  <Ionicons name="game-controller" size={24} color="#10B981" />
+                </View>
+              )}
             </View>
-          )}
 
-          {/* Price Badge */}
-          <View className="absolute top-3 right-3 bg-green-500 px-3 py-1 rounded-full">
-            <Text className="text-white text-sm font-bold">
-              {formatPrice(listing.price)}
-            </Text>
-          </View>
-        </View>
-
-        {/* Content Section */}
-        <View className="p-4">
-          {/* Title and Description */}
-          <View className="mb-3">
-            <Text className="text-lg font-bold text-white" numberOfLines={1}>
-              {listing.title}
-            </Text>
-            <Text className="text-sm text-gray-400 mt-1" numberOfLines={2}>
-              {listing.description}
-            </Text>
+            {/* Game Info */}
+            <View className="flex-1">
+              <Text
+                className="text-lg font-bold text-white mb-1"
+                numberOfLines={1}
+              >
+                {listing.title}
+              </Text>
+              <Text className="text-slate-400 text-sm mb-2" numberOfLines={2}>
+                {listing.description}
+              </Text>
+              <View className="flex-row items-center justify-between">
+                <Text className="text-xl font-bold text-emerald-500">
+                  {formatPrice(listing.price)}
+                </Text>
+                <Ionicons
+                  name={expanded ? "chevron-up" : "chevron-down"}
+                  size={20}
+                  color="#94a3b8"
+                />
+              </View>
+            </View>
           </View>
 
           {/* Contact Info */}
-          <View className="flex-row items-center justify-between mb-3">
-            <View className="flex-row items-center">
-              <Ionicons name="call" size={14} color="#10B981" />
-              <Text className="text-green-400 text-sm ml-1">
-                {listing.contact.phone}
-              </Text>
-            </View>
-            <Text className="text-gray-500 text-xs">
-              {formatTimeAgo(listing.createdAt)}
-            </Text>
-          </View>
-
-          {/* MongoDB Actions */}
-          <View className="flex-row justify-end pt-3 border-t border-gray-700 space-x-2">
-            <TouchableOpacity
-              onPress={handleEdit}
-              className="bg-blue-100 px-3 py-1 rounded-lg"
-            >
-              <Text className="text-blue-600 text-xs font-medium">Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleDelete}
-              className="bg-red-100 px-3 py-1 rounded-lg"
-            >
-              <Text className="text-red-600 text-xs font-medium">Delete</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* MongoDB ID */}
-          <View className="mt-2 pt-2 border-t border-gray-700">
-            <Text className="text-gray-500 text-xs">
-              ID: {listing.id.slice(0, 8)}...
+          <View className="flex-row items-center mt-3">
+            <Ionicons name="call" size={14} color="#10B981" />
+            <Text className="text-emerald-400 text-sm ml-2">
+              {listing.contact.phone}
             </Text>
           </View>
         </View>
+
+        {/* Expandable Actions */}
+        {expanded && (
+          <View className="bg-slate-700/50 px-5 py-4 border-t border-slate-600">
+            <View className="flex-row justify-end space-x-3">
+              <TouchableOpacity
+                onPress={handleEdit}
+                className="bg-slate-600 px-5 py-3 rounded-xl border border-slate-500"
+              >
+                <View className="flex-row items-center">
+                  <Ionicons name="pencil" size={16} color="#94a3b8" />
+                  <Text className="text-slate-300 text-sm font-medium ml-2">
+                    Edit
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleDelete}
+                disabled={deleting}
+                className={`px-5 py-3 rounded-xl border ${
+                  deleting
+                    ? "bg-slate-500 border-slate-400"
+                    : "bg-red-500/20 border-red-500/50"
+                }`}
+              >
+                {deleting ? (
+                  <View className="flex-row items-center">
+                    <ActivityIndicator size="small" color="#94a3b8" />
+                    <Text className="text-slate-400 text-sm font-medium ml-2">
+                      Deleting...
+                    </Text>
+                  </View>
+                ) : (
+                  <View className="flex-row items-center">
+                    <Ionicons name="trash" size={16} color="#ef4444" />
+                    <Text className="text-red-400 text-sm font-medium ml-2">
+                      Delete
+                    </Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {/* Game ID */}
+            <View className="mt-3 pt-3 border-t border-slate-600">
+              <Text className="text-slate-500 text-xs">
+                ID: {listing.id.slice(0, 8)}...
+              </Text>
+            </View>
+          </View>
+        )}
       </TouchableOpacity>
     </Animated.View>
   );

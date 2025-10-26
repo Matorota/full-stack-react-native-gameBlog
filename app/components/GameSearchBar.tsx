@@ -11,20 +11,20 @@ export default function GameSearchBar() {
   };
 
   return (
-    <View className="bg-gray-800 px-4 py-3 border-b border-gray-700">
-      <View className="bg-gray-700 rounded-xl shadow-sm border border-gray-600">
-        <View className="flex-row items-center px-4 py-3">
-          <Ionicons name="search" size={20} color="#10B981" />
+    <View className="bg-slate-800 px-6 py-4 border-b border-slate-600">
+      <View className="bg-slate-700 rounded-2xl shadow-lg border border-slate-600">
+        <View className="flex-row items-center px-5 py-4">
+          <Ionicons name="search" size={22} color="#10B981" />
           <TextInput
-            className="flex-1 ml-3 text-base text-white"
-            placeholder="Ieškoti žaidimų, konsolių..."
-            placeholderTextColor="#6B7280"
+            className="flex-1 ml-4 text-lg text-white"
+            placeholder="Search games, consoles..."
+            placeholderTextColor="#94a3b8"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
           {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={clearSearch} className="ml-2">
-              <Ionicons name="close-circle" size={20} color="#6B7280" />
+            <TouchableOpacity onPress={clearSearch} className="ml-3">
+              <Ionicons name="close-circle" size={22} color="#94a3b8" />
             </TouchableOpacity>
           )}
         </View>
