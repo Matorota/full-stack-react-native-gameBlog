@@ -18,6 +18,7 @@ import { useRouter } from "expo-router";
 
 // Categories for filtering games - no longer importing from sample data
 const CATEGORIES: { key: string; label: string; icon: string }[] = [
+  { key: "all", label: "All", icon: "apps" },
   { key: "games", label: "Games", icon: "game-controller" },
   { key: "consoles", label: "Consoles", icon: "tv" },
   { key: "accessories", label: "Accessories", icon: "headset" },
@@ -58,45 +59,51 @@ export default function GameMarketplace() {
       {/* Search Bar */}
       <GameSearchBar />
 
-      {/* Categories */}
-      <View className="bg-slate-800 px-6 py-8 border-b border-slate-600">
+      {/* Categories - Modern Chip Design */}
+      <View className="bg-slate-800 px-4 py-6 border-b border-slate-600">
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 12 }}
+          contentContainerStyle={{ paddingHorizontal: 8, paddingVertical: 4 }}
         >
-          <View className="flex-row space-x-12">
-            {CATEGORIES.map((category) => (
-              <TouchableOpacity
-                key={category.key}
-                onPress={() => setSelectedCategory(category.key as any)}
-                className={`px-4 py-3 rounded-xl border min-w-[100px] ${
-                  selectedCategory === category.key
-                    ? "bg-emerald-500 border-emerald-400"
-                    : "bg-slate-700/80 border-slate-600"
-                }`}
-              >
-                <View className="flex-row items-center justify-center space-x-1">
-                  <Ionicons
-                    name={category.icon as any}
-                    size={16}
-                    color={
-                      selectedCategory === category.key ? "white" : "#94a3b8"
-                    }
-                  />
-                  <Text
-                    className={`text-sm font-medium ${
-                      selectedCategory === category.key
-                        ? "text-white"
-                        : "text-slate-300"
-                    }`}
-                  >
-                    {category.label}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+          {CATEGORIES.map((category, index) => (
+            <TouchableOpacity
+              key={category.key}
+              onPress={() => setSelectedCategory(category.key as any)}
+              className={`mx-1 px-5 py-2.5 rounded-full ${
+                selectedCategory === category.key
+                  ? "bg-emerald-500 shadow-lg shadow-emerald-500/25"
+                  : "bg-slate-700 border border-slate-600"
+              }`}
+              style={{
+                shadowColor:
+                  selectedCategory === category.key ? "#10B981" : "transparent",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: selectedCategory === category.key ? 0.3 : 0,
+                shadowRadius: 4,
+                elevation: selectedCategory === category.key ? 4 : 0,
+              }}
+            >
+              <View className="flex-row items-center">
+                <Ionicons
+                  name={category.icon as any}
+                  size={18}
+                  color={
+                    selectedCategory === category.key ? "white" : "#94a3b8"
+                  }
+                />
+                <Text
+                  className={`ml-2 text-sm font-semibold ${
+                    selectedCategory === category.key
+                      ? "text-white"
+                      : "text-slate-300"
+                  }`}
+                >
+                  {category.label}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
 

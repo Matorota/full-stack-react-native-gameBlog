@@ -99,44 +99,45 @@ export default function AddGamePage() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-slate-50">
+    <ScrollView className="flex-1 bg-slate-900">
       <View className="p-8">
         {/* Header */}
         <View className="mb-10">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="mb-6 self-start bg-slate-200 px-5 py-3 rounded-xl"
+            className="mb-8 self-start bg-slate-700 px-6 py-4 rounded-xl"
           >
-            <Text className="text-slate-700 text-lg font-medium">← Back</Text>
+            <Text className="text-white text-lg font-medium">← Back</Text>
           </TouchableOpacity>
-          <Text className="text-4xl font-bold text-slate-800 mb-4">
+          <Text className="text-4xl font-bold text-white mb-4">
             Add New Game
           </Text>
-          <Text className="text-slate-600 text-lg leading-relaxed">
+          <Text className="text-slate-300 text-lg leading-relaxed">
             Add your game to the MongoDB database and share it with the
             community
           </Text>
         </View>
 
         {/* Form */}
-        <View className="bg-white rounded-2xl shadow-lg p-8 space-y-8">
+        <View className="bg-slate-800 rounded-2xl shadow-lg p-10 space-y-8 border border-slate-700">
           {/* Game Name */}
           <View>
-            <Text className="text-slate-700 font-semibold mb-3 text-lg">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Game Name *
             </Text>
             <TextInput
               value={formData.name}
               onChangeText={(text) => setFormData({ ...formData, name: text })}
               placeholder="Enter game name"
-              className="border-2 border-slate-200 rounded-xl px-5 py-4 text-slate-800 text-lg bg-slate-50 focus:border-emerald-500"
+              placeholderTextColor="#94A3B8"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
               maxLength={100}
             />
           </View>
 
           {/* Description */}
           <View>
-            <Text className="text-slate-700 font-semibold mb-3 text-lg">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Description *
             </Text>
             <TextInput
@@ -145,9 +146,10 @@ export default function AddGamePage() {
                 setFormData({ ...formData, description: text })
               }
               placeholder="Describe the game..."
+              placeholderTextColor="#94A3B8"
               multiline
               numberOfLines={4}
-              className="border-2 border-slate-200 rounded-xl px-5 py-4 text-slate-800 text-lg bg-slate-50 h-32 focus:border-emerald-500"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700 h-32"
               maxLength={500}
               textAlignVertical="top"
             />
@@ -155,34 +157,36 @@ export default function AddGamePage() {
 
           {/* Price */}
           <View>
-            <Text className="text-slate-700 font-semibold mb-3 text-lg">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Price (€) *
             </Text>
             <TextInput
               value={formData.price}
               onChangeText={(text) => setFormData({ ...formData, price: text })}
               placeholder="0.00"
+              placeholderTextColor="#94A3B8"
               keyboardType="decimal-pad"
-              className="border-2 border-slate-200 rounded-xl px-5 py-4 text-slate-800 text-lg bg-slate-50 focus:border-emerald-500"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
             />
           </View>
 
           {/* Image URL */}
           <View>
-            <Text className="text-slate-700 font-semibold mb-3 text-lg">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Image URL
             </Text>
             <TextInput
               value={formData.img}
               onChangeText={(text) => setFormData({ ...formData, img: text })}
               placeholder="https://example.com/image.jpg"
+              placeholderTextColor="#94A3B8"
               autoCapitalize="none"
               autoCorrect={false}
-              className="border-2 border-slate-200 rounded-xl px-5 py-4 text-slate-800 text-lg bg-slate-50 focus:border-emerald-500"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
             />
             {formData.img && (
               <View className="mt-6">
-                <Text className="text-slate-600 text-base mb-3 font-medium">
+                <Text className="text-slate-300 text-base mb-3 font-medium">
                   Preview:
                 </Text>
                 <Image
@@ -202,7 +206,7 @@ export default function AddGamePage() {
 
           {/* Contact Number */}
           <View>
-            <Text className="text-slate-700 font-semibold mb-3 text-lg">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Contact Number *
             </Text>
             <TextInput
@@ -211,32 +215,33 @@ export default function AddGamePage() {
                 setFormData({ ...formData, contacts_nr: text })
               }
               placeholder="+370 600 00000"
+              placeholderTextColor="#94A3B8"
               keyboardType="phone-pad"
-              className="border-2 border-slate-200 rounded-xl px-5 py-4 text-slate-800 text-lg bg-slate-50 focus:border-emerald-500"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
             />
           </View>
 
           {/* Category */}
           <View>
-            <Text className="text-slate-700 font-semibold mb-4 text-lg">
+            <Text className="text-white font-semibold mb-4 text-lg">
               Category
             </Text>
-            <View className="flex-row flex-wrap gap-3">
+            <View className="flex-row flex-wrap gap-4">
               {Object.values(Category).map((category) => (
                 <TouchableOpacity
                   key={category}
                   onPress={() => setFormData({ ...formData, category })}
-                  className={`px-6 py-3 rounded-2xl border-2 ${
+                  className={`px-6 py-4 rounded-2xl border-2 ${
                     formData.category === category
-                      ? "bg-emerald-500 border-emerald-400"
-                      : "bg-slate-100 border-slate-200"
+                      ? "bg-emerald-600 border-emerald-500"
+                      : "bg-slate-700 border-slate-600"
                   }`}
                 >
                   <Text
                     className={`capitalize text-base ${
                       formData.category === category
                         ? "text-white font-semibold"
-                        : "text-slate-600 font-medium"
+                        : "text-slate-300 font-medium"
                     }`}
                   >
                     {category.replace("_", " ")}
@@ -250,30 +255,28 @@ export default function AddGamePage() {
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={loading}
-            className={`py-5 rounded-2xl mt-4 ${
-              loading
-                ? "bg-slate-400"
-                : "bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg"
+            className={`py-5 px-8 rounded-xl mt-8 ${
+              loading ? "bg-slate-600" : "bg-emerald-600"
             }`}
           >
             {loading ? (
               <View className="flex-row justify-center items-center">
                 <ActivityIndicator size="small" color="white" />
-                <Text className="text-white font-bold ml-3 text-xl">
+                <Text className="text-white font-medium ml-3 text-lg">
                   Adding Game...
                 </Text>
               </View>
             ) : (
-              <Text className="text-white font-bold text-center text-xl">
-                Add Game to MongoDB
+              <Text className="text-white font-medium text-center text-lg">
+                Add Game
               </Text>
             )}
           </TouchableOpacity>
         </View>
 
-        <View className="mt-8 bg-emerald-50 rounded-2xl p-6 border border-emerald-100">
-          <Text className="text-emerald-800 font-bold mb-2 text-lg">Info</Text>
-          <Text className="text-emerald-700 text-base leading-relaxed">
+        <View className="mt-8 bg-slate-800 rounded-2xl p-6 border border-slate-700">
+          <Text className="text-emerald-400 font-bold mb-2 text-lg">Info</Text>
+          <Text className="text-slate-300 text-base leading-relaxed">
             This game will be added directly to your MongoDB database and will
             appear on the main page immediately.
           </Text>

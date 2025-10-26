@@ -111,51 +111,50 @@ export default function EditGamePage() {
 
   if (!game) {
     return (
-      <View className="flex-1 bg-gray-50 justify-center items-center">
-        <ActivityIndicator size="large" color="#3B82F6" />
-        <Text className="text-gray-600 mt-4">Loading game...</Text>
+      <View className="flex-1 bg-slate-900 justify-center items-center">
+        <ActivityIndicator size="large" color="#10b981" />
+        <Text className="text-slate-400 mt-4">Loading game...</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
-      <View className="p-6">
+    <ScrollView className="flex-1 bg-slate-900">
+      <View className="p-10">
         {/* Header */}
-        <View className="mb-6">
+        <View className="mb-8">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="mb-4 self-start"
+            className="mb-6 self-start"
           >
-            <Text className="text-blue-500 text-lg">← Back</Text>
+            <Text className="text-emerald-400 text-lg">← Back</Text>
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-gray-800 mb-2">
-            Edit Game
-          </Text>
-          <Text className="text-gray-600">
+          <Text className="text-3xl font-bold text-white mb-2">Edit Game</Text>
+          <Text className="text-slate-400">
             Update "{game.title}" in your MongoDB collection
           </Text>
         </View>
 
         {/* Form */}
-        <View className="bg-white rounded-xl shadow-sm p-6 space-y-6">
+        <View className="bg-slate-800 rounded-xl shadow-sm p-10 space-y-8">
           {/* Game Name */}
           <View>
-            <Text className="text-gray-700 font-semibold mb-2">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Game Name *
             </Text>
             <TextInput
               value={formData.name}
               onChangeText={(text) => setFormData({ ...formData, name: text })}
               placeholder="Enter game name"
-              className="border border-gray-200 rounded-lg px-4 py-3 text-gray-800"
+              placeholderTextColor="#94A3B8"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
               maxLength={100}
             />
           </View>
 
           {/* Description */}
           <View>
-            <Text className="text-gray-700 font-semibold mb-2">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Description *
             </Text>
             <TextInput
@@ -164,41 +163,47 @@ export default function EditGamePage() {
                 setFormData({ ...formData, description: text })
               }
               placeholder="Describe the game..."
+              placeholderTextColor="#94A3B8"
               multiline
               numberOfLines={4}
-              className="border border-gray-200 rounded-lg px-4 py-3 text-gray-800 h-24"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700 h-32"
               maxLength={500}
+              textAlignVertical="top"
             />
           </View>
 
           {/* Price */}
           <View>
-            <Text className="text-gray-700 font-semibold mb-2">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Price (€) *
             </Text>
             <TextInput
               value={formData.price}
               onChangeText={(text) => setFormData({ ...formData, price: text })}
               placeholder="0.00"
+              placeholderTextColor="#94A3B8"
               keyboardType="decimal-pad"
-              className="border border-gray-200 rounded-lg px-4 py-3 text-gray-800"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
             />
           </View>
 
           {/* Image URL */}
           <View>
-            <Text className="text-gray-700 font-semibold mb-2">Image URL</Text>
+            <Text className="text-white font-semibold mb-3 text-lg">
+              Image URL
+            </Text>
             <TextInput
               value={formData.img}
               onChangeText={(text) => setFormData({ ...formData, img: text })}
               placeholder="https://example.com/image.jpg"
+              placeholderTextColor="#94A3B8"
               autoCapitalize="none"
               autoCorrect={false}
-              className="border border-gray-200 rounded-lg px-4 py-3 text-gray-800"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
             />
             {formData.img && (
-              <View className="mt-3">
-                <Text className="text-gray-600 text-sm mb-2">Preview:</Text>
+              <View className="mt-4">
+                <Text className="text-slate-400 text-sm mb-2">Preview:</Text>
                 <Image
                   source={{ uri: formData.img }}
                   className="w-full h-48 rounded-lg"
@@ -216,7 +221,7 @@ export default function EditGamePage() {
 
           {/* Contact Number */}
           <View>
-            <Text className="text-gray-700 font-semibold mb-2">
+            <Text className="text-white font-semibold mb-3 text-lg">
               Contact Number *
             </Text>
             <TextInput
@@ -225,30 +230,33 @@ export default function EditGamePage() {
                 setFormData({ ...formData, contacts_nr: text })
               }
               placeholder="+370 600 00000"
+              placeholderTextColor="#94A3B8"
               keyboardType="phone-pad"
-              className="border border-gray-200 rounded-lg px-4 py-3 text-gray-800"
+              className="border-2 border-slate-600 rounded-xl px-5 py-4 text-white text-lg bg-slate-700"
             />
           </View>
 
           {/* Category */}
           <View>
-            <Text className="text-gray-700 font-semibold mb-2">Category</Text>
-            <View className="flex-row flex-wrap gap-2">
+            <Text className="text-white font-semibold mb-3 text-lg">
+              Category
+            </Text>
+            <View className="flex-row flex-wrap gap-3">
               {Object.values(Category).map((category) => (
                 <TouchableOpacity
                   key={category}
                   onPress={() => setFormData({ ...formData, category })}
-                  className={`px-4 py-2 rounded-full border ${
+                  className={`px-5 py-3 rounded-full border-2 ${
                     formData.category === category
-                      ? "bg-blue-500 border-blue-500"
-                      : "bg-white border-gray-200"
+                      ? "bg-emerald-600 border-emerald-600"
+                      : "bg-slate-700 border-slate-600"
                   }`}
                 >
                   <Text
                     className={`capitalize ${
                       formData.category === category
                         ? "text-white font-semibold"
-                        : "text-gray-600"
+                        : "text-slate-300"
                     }`}
                   >
                     {category.replace("_", " ")}
@@ -262,14 +270,14 @@ export default function EditGamePage() {
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={loading}
-            className={`py-4 rounded-lg ${
-              loading ? "bg-gray-400" : "bg-blue-500"
+            className={`py-5 px-10 rounded-xl mt-10 ${
+              loading ? "bg-slate-600" : "bg-emerald-600"
             }`}
           >
             {loading ? (
               <View className="flex-row justify-center items-center">
                 <ActivityIndicator size="small" color="white" />
-                <Text className="text-white font-semibold ml-2">
+                <Text className="text-white font-semibold ml-2 text-lg">
                   Updating Game...
                 </Text>
               </View>
@@ -282,14 +290,14 @@ export default function EditGamePage() {
         </View>
 
         {/* Game Info */}
-        <View className="mt-6 bg-yellow-50 rounded-lg p-4">
-          <Text className="text-yellow-800 font-semibold mb-1">
+        <View className="mt-10 bg-slate-800 rounded-xl p-6 border border-slate-700">
+          <Text className="text-emerald-400 font-semibold mb-2 text-lg">
             ℹ️ Game Info
           </Text>
-          <Text className="text-yellow-700 text-sm mb-2">
+          <Text className="text-slate-300 text-base mb-2">
             <Text className="font-semibold">Original ID:</Text> {game.id}
           </Text>
-          <Text className="text-yellow-700 text-sm">
+          <Text className="text-slate-300 text-base">
             <Text className="font-semibold">Created:</Text>{" "}
             {new Date(game.createdAt).toLocaleDateString()}
           </Text>

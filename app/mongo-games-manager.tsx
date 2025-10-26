@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useListings } from "./contexts/ListingContext";
 import { Listing } from "./types";
@@ -64,7 +65,7 @@ export default function MongoGamesPage() {
 
   return (
     <ScrollView
-      className="flex-1 bg-slate-50"
+      className="flex-1 bg-slate-900"
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -73,55 +74,57 @@ export default function MongoGamesPage() {
         <View className="mb-10">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="mb-6 self-start bg-slate-200 px-5 py-3 rounded-xl"
+            className="mb-8 self-start bg-slate-700 px-6 py-4 rounded-xl"
           >
-            <Text className="text-slate-700 text-lg font-medium">← Back</Text>
+            <Text className="text-white text-lg font-medium">← Back</Text>
           </TouchableOpacity>
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-4xl font-bold text-slate-800">My Games</Text>
+          <View className="flex-row justify-between items-center mb-8">
+            <Text className="text-4xl font-bold text-white">My Games</Text>
             <TouchableOpacity
               onPress={() => router.push("/add-mongo-game")}
-              className="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 rounded-xl shadow-lg"
+              className="bg-emerald-600 px-8 py-4 rounded-xl shadow-sm border border-emerald-500"
             >
-              <Text className="text-white font-bold text-lg">+ Add Game</Text>
+              <Text className="text-white font-semibold text-lg">
+                + Add Game
+              </Text>
             </TouchableOpacity>
           </View>
-          <Text className="text-slate-600 text-lg">
+          <Text className="text-slate-300 text-lg">
             {listings.length} games in your collection
           </Text>
         </View>
 
         {listings.length === 0 ? (
-          <View className="bg-white rounded-xl shadow-sm p-8 items-center">
-            <View className="w-16 h-16 bg-gray-200 rounded-lg items-center justify-center mb-4">
-              <Text className="text-gray-400 text-lg">GAME</Text>
+          <View className="bg-slate-800 rounded-2xl p-12 items-center border border-slate-700 shadow-lg">
+            <View className="w-20 h-20 bg-slate-700 rounded-2xl items-center justify-center mb-6">
+              <Text className="text-slate-400 text-xl font-bold">GAME</Text>
             </View>
-            <Text className="text-xl font-semibold text-gray-800 mb-2">
+            <Text className="text-2xl font-bold text-white mb-4">
               No Games Yet
             </Text>
-            <Text className="text-gray-600 text-center mb-6">
+            <Text className="text-slate-300 text-center mb-8 text-lg leading-relaxed">
               Start building your game collection by adding your first game!
             </Text>
             <TouchableOpacity
               onPress={() => router.push("/add-mongo-game")}
-              className="bg-blue-500 px-6 py-3 rounded-lg"
+              className="bg-emerald-600 px-8 py-4 rounded-xl shadow-sm"
             >
-              <Text className="text-white font-semibold">
+              <Text className="text-white font-medium text-lg">
                 Add Your First Game
               </Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <View className="space-y-6">
+          <View className="space-y-12">
             {listings.map((listing) => (
               <View
                 key={listing.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100"
+                className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-lg mb-4"
               >
-                <View className="p-6">
+                <View className="p-10">
                   <View className="flex-row">
                     {/* Game Image */}
-                    <View className="w-24 h-24 mr-5">
+                    <View className="w-28 h-28 mr-8">
                       {listing.images && listing.images[0] ? (
                         <Image
                           source={{ uri: listing.images[0] }}
@@ -129,7 +132,7 @@ export default function MongoGamesPage() {
                           resizeMode="cover"
                         />
                       ) : (
-                        <View className="w-full h-full bg-slate-200 rounded-2xl items-center justify-center">
+                        <View className="w-full h-full bg-slate-700 rounded-2xl items-center justify-center">
                           <Text className="text-slate-400 text-sm font-medium">
                             No Image
                           </Text>
@@ -139,21 +142,21 @@ export default function MongoGamesPage() {
 
                     {/* Game Info */}
                     <View className="flex-1">
-                      <Text className="text-lg font-bold text-gray-800 mb-1">
+                      <Text className="text-xl font-bold text-white mb-3">
                         {listing.title}
                       </Text>
                       <Text
-                        className="text-gray-600 text-sm mb-2"
+                        className="text-slate-300 text-base mb-4"
                         numberOfLines={2}
                       >
                         {listing.description}
                       </Text>
                       <View className="flex-row items-center justify-between">
-                        <Text className="text-xl font-bold text-blue-600">
+                        <Text className="text-xl font-bold text-emerald-400">
                           {formatPrice(listing.price)}
                         </Text>
                         <View className="flex-row items-center">
-                          <Text className="text-gray-500 text-sm mr-2">
+                          <Text className="text-slate-400 text-sm mr-2">
                             {listing.contact.phone}
                           </Text>
                         </View>
@@ -162,47 +165,60 @@ export default function MongoGamesPage() {
                   </View>
 
                   {/* Action Buttons */}
-                  <View className="flex-row justify-end mt-5 space-x-3">
+                  <View className="flex-row justify-between mt-8 mx-4">
                     <TouchableOpacity
                       onPress={() => router.push(`/edit-game/${listing.id}`)}
-                      className="bg-slate-100 px-5 py-3 rounded-xl border border-slate-200"
+                      className="flex-1 bg-emerald-600 px-5 py-3 rounded-xl mr-3 flex-row items-center justify-center shadow-lg"
+                      style={{ elevation: 3 }}
                     >
-                      <Text className="text-slate-700 font-semibold">
-                        {" "}
+                      <Ionicons name="create-outline" size={16} color="white" />
+                      <Text className="text-white font-semibold text-sm ml-2">
                         Edit
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleDelete(listing)}
                       disabled={deleting === listing.id}
-                      className={`px-5 py-3 rounded-xl ${
-                        deleting === listing.id
-                          ? "bg-slate-300"
-                          : "bg-red-100 border border-red-200"
+                      className={`flex-1 px-5 py-3 rounded-xl ml-3 flex-row items-center justify-center shadow-lg ${
+                        deleting === listing.id ? "bg-slate-600" : "bg-red-600"
                       }`}
+                      style={{ elevation: 3 }}
                     >
                       {deleting === listing.id ? (
-                        <View className="flex-row items-center">
-                          <ActivityIndicator size="small" color="#DC2626" />
-                          <Text className="text-red-600 font-medium ml-1">
+                        <>
+                          <ActivityIndicator size="small" color="#ffffff" />
+                          <Text className="text-white font-semibold text-sm ml-2">
                             Deleting...
                           </Text>
-                        </View>
+                        </>
                       ) : (
-                        <Text className="text-red-600 font-medium">Delete</Text>
+                        <>
+                          <Ionicons
+                            name="trash-outline"
+                            size={16}
+                            color="white"
+                          />
+                          <Text className="text-white font-semibold text-sm ml-2">
+                            Delete
+                          </Text>
+                        </>
                       )}
                     </TouchableOpacity>
                   </View>
 
                   {/* Metadata */}
-                  <View className="mt-3 pt-3 border-t border-gray-100">
-                    <View className="flex-row justify-between text-xs">
-                      <Text className="text-gray-400">
-                        ID: {listing.id.slice(0, 8)}...
-                      </Text>
-                      <Text className="text-gray-400">
-                        Category: {listing.category}
-                      </Text>
+                  <View className="mt-8 pt-6 border-t border-slate-600">
+                    <View className="flex-row justify-between items-center">
+                      <View className="bg-slate-700 px-3 py-1 rounded-full">
+                        <Text className="text-slate-300 text-xs font-medium">
+                          ID: {listing.id.slice(0, 8)}...
+                        </Text>
+                      </View>
+                      <View className="bg-emerald-600/20 px-3 py-1 rounded-full">
+                        <Text className="text-emerald-400 text-xs font-medium capitalize">
+                          {listing.category.replace("_", " ")}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
