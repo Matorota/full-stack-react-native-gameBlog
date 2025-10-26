@@ -16,7 +16,7 @@ export default function ConnectionStatusIndicator() {
 
   useEffect(() => {
     updateStatus();
-    const interval = setInterval(updateStatus, 3000); // Update every 3 seconds
+    const interval = setInterval(updateStatus, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -60,13 +60,13 @@ export default function ConnectionStatusIndicator() {
   const getStatusText = () => {
     switch (status) {
       case "connected":
-        return "Prisijungta";
+        return "Connected";
       case "connecting":
-        return "Jungiamasi...";
+        return "Connecting...";
       case "error":
-        return "Klaida";
+        return "Error";
       default:
-        return "Atsijungta";
+        return "Disconnected";
     }
   };
 
@@ -97,14 +97,14 @@ export default function ConnectionStatusIndicator() {
           <View className="space-y-2">
             <View className="flex-row items-center">
               <Ionicons name="server" size={14} color="#9CA3AF" />
-              <Text className="text-gray-400 text-xs ml-2">Duomenų bazė:</Text>
+              <Text className="text-gray-400 text-xs ml-2">Database:</Text>
               <Text className="text-green-400 text-xs ml-2 font-semibold">
                 {dbInfo.database}
               </Text>
             </View>
             <View className="flex-row items-center">
               <Ionicons name="albums" size={14} color="#9CA3AF" />
-              <Text className="text-gray-400 text-xs ml-2">Kolekcija:</Text>
+              <Text className="text-gray-400 text-xs ml-2">Collection:</Text>
               <Text className="text-green-400 text-xs ml-2 font-semibold">
                 {dbInfo.collection}
               </Text>
@@ -120,7 +120,7 @@ export default function ConnectionStatusIndicator() {
             {status === "connected" && (
               <View className="mt-2 bg-green-900/20 p-2 rounded">
                 <Text className="text-green-400 text-xs">
-                  ✅ Visi duomenys saugomi ir sinchronizuojami
+                  All data synchronized with MongoDB
                 </Text>
               </View>
             )}

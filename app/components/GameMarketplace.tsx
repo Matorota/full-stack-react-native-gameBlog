@@ -59,9 +59,8 @@ export default function GameMarketplace() {
           </TouchableOpacity>
           <View className="flex-1 items-center">
             <View className="flex-row items-center">
-              <Ionicons name="game-controller" size={28} color="#10B981" />
               <Text className="text-2xl font-bold text-white ml-2">
-                GameHub
+                GameListingSite
               </Text>
             </View>
             <View className="flex-row items-center mt-1">

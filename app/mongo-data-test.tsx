@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
 } from "react-native";
 import GameHubMongoService from "./services/GameHubMongoService";
-import { BlogGame } from "./types";
+import { Listing } from "./types";
 
 export default function MongoDataTest() {
   const [loading, setLoading] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [blogGames, setBlogGames] = useState<BlogGame[]>([]);
+  const [games, setGames] = useState<Listing[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const testConnection = async () => {
@@ -22,54 +22,23 @@ export default function MongoDataTest() {
     try {
       const mongoService = GameHubMongoService.getInstance();
 
-      // Connect to MongoDB Atlas Data API
       const isConnected = await mongoService.connect();
 
       setConnected(isConnected);
 
       if (isConnected) {
-        console.log("✅ Prisijungta prie MongoDB");
+        console.log("Connected to backend");
 
-        // Gauti duomenis iš MongoDB
         const listings = await mongoService.getListings();
+        setGames(listings);
 
-        // Konvertuoti atgal į BlogGame formatą peržiūrai
-        const rawData = await fetch(
-          "https://data.mongodb-api.com/app/data-v1/endpoint/data/v1/action/find",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "api-key": "Nb8F0gvq4v2Q7TfY", // Reikės pakeisti
-            },
-            body: JSON.stringify({
-              dataSource: "Cluster0",
-              database: "blogGames",
-              collection: "blogGames",
-            }),
-          }
-        );
-
-        if (rawData.ok) {
-          const result = await rawData.json();
-          const documents = result.documents || [];
-
-          // Convert MongoDB ObjectId format to BlogGame format
-          const convertedGames: BlogGame[] = documents.map((doc: any) => ({
-            ...doc,
-            _id: doc._id?.$oid || doc._id, // Convert ObjectId format
-          }));
-
-          setBlogGames(convertedGames);
-        }
-
-        console.log(`📊 Gauta ${listings.length} žaidimų iš MongoDB`);
+        console.log(`Found ${listings.length} games from backend`);
       } else {
-        setError("Nepavyko prisijungti prie MongoDB");
+        setError("Failed to connect to backend");
       }
     } catch (err) {
-      console.error("❌ MongoDB klaida:", err);
-      setError(`Klaida: ${err}`);
+      console.error("Backend error:", err);
+      setError(`Error: ${err}`);
       setConnected(false);
     } finally {
       setLoading(false);
@@ -79,10 +48,9 @@ export default function MongoDataTest() {
   return (
     <ScrollView className="flex-1 bg-gray-50 p-6">
       <Text className="text-2xl font-bold text-gray-800 mb-6">
-        MongoDB Duomenų Testas
+        MongoDB Data Test
       </Text>
 
-      {/* Connection Test Button */}
       <TouchableOpacity
         onPress={testConnection}
         disabled={loading}
@@ -93,76 +61,69 @@ export default function MongoDataTest() {
         {loading ? (
           <View className="flex-row items-center justify-center">
             <ActivityIndicator size="small" color="white" />
-            <Text className="text-white font-semibold ml-2">Testuojama...</Text>
+            <Text className="text-white font-semibold ml-2">Testing...</Text>
           </View>
         ) : (
           <Text className="text-white font-semibold text-center">
-            Testuoti MongoDB Prisijungimą
+            Test Backend Connection
           </Text>
         )}
       </TouchableOpacity>
 
-      {/* Connection Status */}
       <View className="bg-white rounded-lg p-4 mb-6">
-        <Text className="text-lg font-semibold mb-2">
-          Prisijungimo Statusas:
-        </Text>
+        <Text className="text-lg font-semibold mb-2">Connection Status:</Text>
         <Text
           className={`text-lg ${connected ? "text-green-600" : "text-red-600"}`}
         >
-          {connected ? "✅ Prisijungta" : "❌ Neprisijungta"}
+          {connected ? "Connected" : "Not Connected"}
         </Text>
         {error && <Text className="text-red-600 mt-2 text-sm">{error}</Text>}
       </View>
 
-      {/* Raw MongoDB Data */}
-      {blogGames.length > 0 && (
+      {games.length > 0 && (
         <View className="bg-white rounded-lg p-4">
           <Text className="text-lg font-semibold mb-4">
-            Tikri MongoDB Duomenys ({blogGames.length} įrašai):
+            Games from MongoDB ({games.length} items):
           </Text>
 
-          {blogGames.map((game, index) => (
+          {games.map((game, index) => (
             <View key={index} className="border-b border-gray-200 pb-4 mb-4">
-              <Text className="font-semibold text-gray-800">
-                🎮 {game.name}
-              </Text>
+              <Text className="font-semibold text-gray-800">{game.title}</Text>
               <Text className="text-gray-600 text-sm mt-1">
-                📝 {game.description}
+                {game.description}
               </Text>
               <Text className="text-green-600 font-semibold mt-1">
-                💰 {game.price}€
+                {game.price} EUR
               </Text>
               <Text className="text-blue-600 text-sm mt-1">
-                📞 {game.contacts_nr}
+                {game.contact.phone}
               </Text>
-              {game.filter && (
+              {game.platform && (
                 <Text className="text-purple-600 text-sm mt-1">
-                  🏷️ {game.filter}
+                  {game.platform}
                 </Text>
               )}
-              {game.img && (
+              {game.images[0] && (
                 <Text className="text-gray-500 text-xs mt-1" numberOfLines={1}>
-                  🖼️ {game.img}
+                  {game.images[0]}
                 </Text>
               )}
-              <Text className="text-gray-400 text-xs mt-1">ID: {game._id}</Text>
+              <Text className="text-gray-400 text-xs mt-1">ID: {game.id}</Text>
             </View>
           ))}
         </View>
       )}
 
-      {/* Instructions */}
       <View className="bg-yellow-50 rounded-lg p-4 mt-6">
         <Text className="text-yellow-800 font-semibold mb-2">
-          ⚠️ Instrukcijos:
+          Instructions:
         </Text>
         <Text className="text-yellow-700 text-sm">
-          1. Pakeiskite "YOUR_PASSWORD_HERE" į tikrą MongoDB Atlas API raktą
+          1. Make sure the backend server is running (cd backend && npm start)
           {"\n"}
-          2. Patikrinkite kad duomenų bazės pavadinimas yra "blogGames"{"\n"}
-          3. Patikrinkite kad kolekcijos pavadinimas yra "blogGames"{"\n"}
-          4. Jei matote duomenis, vadinasi viskas veikia teisingai!
+          2. Check that MongoDB Atlas Network Access is configured
+          {"\n"}
+          3. If you see games, everything is working correctly!
         </Text>
       </View>
     </ScrollView>

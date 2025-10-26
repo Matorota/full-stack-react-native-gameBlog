@@ -32,7 +32,7 @@ export default function MongoConnectionTest() {
     setLoading(true);
     try {
       const mongoService = GameHubMongoService.getInstance();
-      const success = await mongoService.connect(undefined, password);
+      const success = await mongoService.connect();
 
       if (success) {
         setConnected(true);

@@ -8,6 +8,7 @@ import {
   RefreshControl,
   Image,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useListings } from "./contexts/ListingContext";
@@ -154,7 +155,7 @@ export default function MongoGamesPage() {
                         </Text>
                         <View className="flex-row items-center">
                           <Text className="text-gray-500 text-sm mr-2">
-                            📞 {listing.contact.phone}
+                            {listing.contact.phone}
                           </Text>
                         </View>
                       </View>
@@ -167,7 +168,7 @@ export default function MongoGamesPage() {
                       onPress={() => router.push(`/edit-game/${listing.id}`)}
                       className="bg-gray-100 px-4 py-2 rounded-lg"
                     >
-                      <Text className="text-gray-700 font-medium">✏️ Edit</Text>
+                      <Text className="text-gray-700 font-medium"> Edit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleDelete(listing)}
@@ -184,9 +185,7 @@ export default function MongoGamesPage() {
                           </Text>
                         </View>
                       ) : (
-                        <Text className="text-red-600 font-medium">
-                          🗑️ Delete
-                        </Text>
+                        <Text className="text-red-600 font-medium">Delete</Text>
                       )}
                     </TouchableOpacity>
                   </View>
@@ -211,7 +210,7 @@ export default function MongoGamesPage() {
         {/* Footer Info */}
         <View className="mt-8 bg-green-50 rounded-lg p-4">
           <Text className="text-green-800 font-semibold mb-1">
-            📊 MongoDB Status
+            MongoDB Status
           </Text>
           <Text className="text-green-700 text-sm">
             Connected to MongoDB Atlas. All changes are saved in real-time to

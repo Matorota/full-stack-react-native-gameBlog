@@ -12,7 +12,7 @@ class GameHubMongoService {
   private connectionError: string | null = null;
 
   // Backend API URL - change this to your backend URL
-  private baseUrl = "http://localhost:3000/api";
+  private baseUrl = "http://10.77.146.73:3000/api";
 
   private constructor() {}
 
@@ -43,8 +43,8 @@ class GameHubMongoService {
     this.connectionError = null;
 
     try {
-      console.log("🔌 Connecting to GameHub Backend API...");
-      console.log("🌐 URL:", this.baseUrl);
+      console.log("Connecting to GameHub Backend API...");
+      console.log("URL:", this.baseUrl);
 
       // Test the connection by checking health endpoint
       const response = await fetch(`${this.baseUrl}/health`);
@@ -56,8 +56,8 @@ class GameHubMongoService {
       const result = await response.json();
 
       if (result.status === "OK") {
-        console.log("✅ Connected to GameHub Backend API");
-        console.log("📊 Database:", result.database);
+        console.log(" Connected to GameHub Backend API");
+        console.log(" Database:", result.database);
 
         this.connected = true;
         this.connectionStatus = "connected";
@@ -66,7 +66,7 @@ class GameHubMongoService {
         throw new Error("Backend API is not ready");
       }
     } catch (error: any) {
-      console.error("❌ Backend connection failed:", error);
+      console.error(" Backend connection failed:", error);
       this.connected = false;
       this.connectionStatus = "error";
       this.connectionError = error.message || "Unknown error";
@@ -77,7 +77,7 @@ class GameHubMongoService {
   async disconnect(): Promise<void> {
     this.connected = false;
     this.connectionStatus = "disconnected";
-    console.log("🔌 Disconnected from Backend API");
+    console.log(" Disconnected from Backend API");
   }
 
   // Get all games with optional filters
@@ -94,7 +94,7 @@ class GameHubMongoService {
     }
 
     try {
-      console.log("📖 Fetching games from backend...");
+      console.log(" Fetching games from backend...");
 
       const queryParams = new URLSearchParams();
       if (filters?.minPrice)
@@ -112,7 +112,7 @@ class GameHubMongoService {
       const result = await response.json();
       const blogGames = result.data || [];
 
-      console.log(`📊 Loaded ${blogGames.length} games from backend`);
+      console.log(`Loaded ${blogGames.length} games from backend`);
 
       // Convert to Listing format
       return blogGames.map((doc: any) => {
@@ -123,7 +123,7 @@ class GameHubMongoService {
         return blogGameToListing(blogGame);
       });
     } catch (error) {
-      console.error("❌ Error fetching listings:", error);
+      console.error(" Error fetching listings:", error);
       throw error;
     }
   }
@@ -137,7 +137,7 @@ class GameHubMongoService {
     }
 
     try {
-      console.log("➕ Adding new game:", listing.title);
+      console.log(" Adding new game:", listing.title);
 
       const blogGameData = {
         name: listing.title,
@@ -163,7 +163,7 @@ class GameHubMongoService {
       const result = await response.json();
       const newGame = result.data;
 
-      console.log("✅ Game added to database");
+      console.log(" Game added to database");
 
       return {
         ...listing,
@@ -172,7 +172,7 @@ class GameHubMongoService {
         updatedAt: new Date(),
       };
     } catch (error) {
-      console.error("❌ Error creating listing:", error);
+      console.error("Error creating listing:", error);
       throw error;
     }
   }
@@ -187,7 +187,7 @@ class GameHubMongoService {
     }
 
     try {
-      console.log("🔄 Updating game:", id);
+      console.log(" Updating game:", id);
 
       const updateData: any = {};
       if (updates.title) updateData.name = updates.title;
@@ -210,7 +210,7 @@ class GameHubMongoService {
 
       if (!response.ok) {
         if (response.status === 404) {
-          console.log("❌ Game not found");
+          console.log(" Game not found");
           return null;
         }
         throw new Error(`Backend API error: ${response.status}`);
@@ -219,7 +219,7 @@ class GameHubMongoService {
       const result = await response.json();
       const updatedGame = result.data;
 
-      console.log("✅ Game updated in database");
+      console.log(" Game updated in database");
 
       const blogGame: BlogGame = {
         ...updatedGame,
@@ -227,7 +227,7 @@ class GameHubMongoService {
       };
       return blogGameToListing(blogGame);
     } catch (error) {
-      console.error("❌ Error updating listing:", error);
+      console.error(" Error updating listing:", error);
       throw error;
     }
   }
@@ -247,16 +247,16 @@ class GameHubMongoService {
 
       if (!response.ok) {
         if (response.status === 404) {
-          console.log("❌ Game not found");
+          console.log(" Game not found");
           return false;
         }
         throw new Error(`Backend API error: ${response.status}`);
       }
 
-      console.log("✅ Game deleted from database");
+      console.log(" Game deleted from database");
       return true;
     } catch (error) {
-      console.error("❌ Error deleting listing:", error);
+      console.error(" Error deleting listing:", error);
       throw error;
     }
   }
@@ -291,7 +291,7 @@ class GameHubMongoService {
         return blogGameToListing(blogGame);
       });
     } catch (error) {
-      console.error("❌ Error searching listings:", error);
+      console.error(" Error searching listings:", error);
       throw error;
     }
   }
@@ -317,7 +317,7 @@ class GameHubMongoService {
       const result = await response.json();
       return result.data;
     } catch (error) {
-      console.error("❌ Error getting gaming stats:", error);
+      console.error(" Error getting gaming stats:", error);
       throw error;
     }
   }

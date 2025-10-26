@@ -27,7 +27,6 @@ export default function GameEmptyState({ onAddListing }: GameEmptyStateProps) {
   }));
 
   React.useEffect(() => {
-    // Floating animation for controller
     translateY.value = withRepeat(
       withSequence(
         withSpring(-10, { duration: 2000 }),
@@ -36,7 +35,6 @@ export default function GameEmptyState({ onAddListing }: GameEmptyStateProps) {
       -1
     );
 
-    // Subtle pulse animation
     scale.value = withRepeat(
       withSequence(
         withSpring(1.05, { duration: 3000 }),
@@ -57,12 +55,10 @@ export default function GameEmptyState({ onAddListing }: GameEmptyStateProps) {
 
   return (
     <View className="flex-1 justify-center items-center px-8 py-20">
-      {/* Animated Gaming Controller */}
       <Animated.View style={iconStyle} className="mb-6">
         <View className="w-24 h-24 bg-gray-700 rounded-full items-center justify-center relative">
           <Ionicons name="game-controller" size={48} color="#10B981" />
 
-          {/* Gaming LED effects */}
           <View className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
           <View className="absolute -bottom-1 -left-1 w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-300" />
         </View>

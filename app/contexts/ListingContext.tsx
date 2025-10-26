@@ -199,19 +199,18 @@ export function ListingProvider({ children }: ListingProviderProps) {
       const connected = await mongoService.connect();
 
       if (connected) {
-        console.log("✅ Connected to backend, loading games...");
+        console.log("Connected to backend, loading games...");
 
-        // Get listings from backend
         const listings = await mongoService.getListings();
 
         dispatch({ type: "SET_LISTINGS", payload: listings });
-        console.log(`📊 Loaded ${listings.length} games from backend`);
+        console.log(`Loaded ${listings.length} games from backend`);
       } else {
-        console.log("❌ Failed to connect to backend");
+        console.log("Failed to connect to backend");
         dispatch({ type: "SET_LISTINGS", payload: [] });
       }
     } catch (error) {
-      console.error("❌ Backend error:", error);
+      console.error("Backend error:", error);
       dispatch({ type: "SET_LISTINGS", payload: [] });
     }
   };
@@ -283,9 +282,8 @@ export function ListingProvider({ children }: ListingProviderProps) {
           // Use MongoDB service to create listing
           const newListing = await mongoService.createListing(listingData);
           dispatch({ type: "ADD_LISTING", payload: newListing });
-          console.log("✅ Blog game added to MongoDB:", newListing.title);
+          console.log("Blog game added to MongoDB:", newListing.title);
         } else {
-          // Fallback to local storage
           const newListing: Listing = {
             ...listingData,
             id: generateId(),
@@ -294,11 +292,10 @@ export function ListingProvider({ children }: ListingProviderProps) {
             userId: state.currentUser?.id,
           };
           dispatch({ type: "ADD_LISTING", payload: newListing });
-          console.log("📱 Blog game added locally:", newListing.title);
+          console.log("Blog game added locally:", newListing.title);
         }
       } catch (error) {
-        console.error("❌ Error adding listing:", error);
-        // Fallback to local storage on error
+        console.error("Error adding listing:", error);
         const newListing: Listing = {
           ...listingData,
           id: generateId(),
@@ -315,23 +312,17 @@ export function ListingProvider({ children }: ListingProviderProps) {
         const mongoService = GameHubMongoService.getInstance();
 
         if (mongoService.isConnected()) {
-          // Use MongoDB service to update listing
           const updatedListing = await mongoService.updateListing(id, updates);
           if (updatedListing) {
             dispatch({ type: "UPDATE_LISTING", payload: { id, updates } });
-            console.log(
-              "✅ Blog game updated in MongoDB:",
-              updatedListing.title
-            );
+            console.log("Blog game updated in MongoDB:", updatedListing.title);
           }
         } else {
-          // Fallback to local storage
           dispatch({ type: "UPDATE_LISTING", payload: { id, updates } });
-          console.log("📱 Blog game updated locally");
+          console.log("Blog game updated locally");
         }
       } catch (error) {
-        console.error("❌ Error updating listing:", error);
-        // Fallback to local storage on error
+        console.error("Error updating listing:", error);
         dispatch({ type: "UPDATE_LISTING", payload: { id, updates } });
       }
     },
@@ -341,20 +332,17 @@ export function ListingProvider({ children }: ListingProviderProps) {
         const mongoService = GameHubMongoService.getInstance();
 
         if (mongoService.isConnected()) {
-          // Use MongoDB service to delete listing
           const success = await mongoService.deleteListing(id);
           if (success) {
             dispatch({ type: "DELETE_LISTING", payload: id });
-            console.log("✅ Blog game deleted from MongoDB");
+            console.log("Blog game deleted from MongoDB");
           }
         } else {
-          // Fallback to local storage
           dispatch({ type: "DELETE_LISTING", payload: id });
-          console.log("📱 Blog game deleted locally");
+          console.log("Blog game deleted locally");
         }
       } catch (error) {
-        console.error("❌ Error deleting listing:", error);
-        // Fallback to local storage on error
+        console.error("Error deleting listing:", error);
         dispatch({ type: "DELETE_LISTING", payload: id });
       }
     },

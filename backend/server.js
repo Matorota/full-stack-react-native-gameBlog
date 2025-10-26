@@ -16,15 +16,15 @@ let collection;
 
 const connectToMongoDB = async () => {
   try {
-    console.log("🔌 Connecting to MongoDB...");
+    console.log(" Connecting to MongoDB...");
     const client = await MongoClient.connect(process.env.MONGODB_URI);
     db = client.db(process.env.MONGODB_DB_NAME);
     collection = db.collection(process.env.MONGODB_COLLECTION_NAME);
-    console.log("✅ Connected to MongoDB");
-    console.log("📁 Database:", process.env.MONGODB_DB_NAME);
-    console.log("📄 Collection:", process.env.MONGODB_COLLECTION_NAME);
+    console.log(" Connected to MongoDB");
+    console.log(" Database:", process.env.MONGODB_DB_NAME);
+    console.log(" Collection:", process.env.MONGODB_COLLECTION_NAME);
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
+    console.error(" MongoDB connection error:", error);
     process.exit(1);
   }
 };

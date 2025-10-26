@@ -144,15 +144,13 @@ export default function GameListingCard({
               onPress={handleEdit}
               className="bg-blue-100 px-3 py-1 rounded-lg"
             >
-              <Text className="text-blue-600 text-xs font-medium">✏️ Edit</Text>
+              <Text className="text-blue-600 text-xs font-medium">Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleDelete}
               className="bg-red-100 px-3 py-1 rounded-lg"
             >
-              <Text className="text-red-600 text-xs font-medium">
-                🗑️ Delete
-              </Text>
+              <Text className="text-red-600 text-xs font-medium">Delete</Text>
             </TouchableOpacity>
           </View>
 

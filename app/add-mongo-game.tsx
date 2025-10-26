@@ -261,9 +261,8 @@ export default function AddGamePage() {
           </TouchableOpacity>
         </View>
 
-        {/* Info */}
         <View className="mt-6 bg-blue-50 rounded-lg p-4">
-          <Text className="text-blue-800 font-semibold mb-1">💡 Info</Text>
+          <Text className="text-blue-800 font-semibold mb-1">Info</Text>
           <Text className="text-blue-700 text-sm">
             This game will be added directly to your MongoDB database and will
             appear on the main page immediately.
