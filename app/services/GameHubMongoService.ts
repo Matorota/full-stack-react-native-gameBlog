@@ -1,5 +1,4 @@
 import { Listing, BlogGame, blogGameToListing } from "../types";
-
 // Simple REST API Service for GameHub MongoDB Backend
 class GameHubMongoService {
   private static instance: GameHubMongoService;
@@ -11,8 +10,7 @@ class GameHubMongoService {
     | "error" = "disconnected";
   private connectionError: string | null = null;
 
-  // Backend API URL - change this to your backend URL
-  private baseUrl = "http://10.77.146.73:3000/api";
+  private baseUrl = process.env.EXPO_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
 
   private constructor() {}
 

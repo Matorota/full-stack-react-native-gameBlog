@@ -15,7 +15,22 @@ Your GameHub React Native app now has a fully functional MongoDB backend with:
 
 ## QUICK START
 
-### Step 1: Configure MongoDB Atlas (ONE TIME ONLY)
+### Step 1: Environment Variables Setup
+
+1. **Frontend Configuration**:
+   - Copy `.env.example` to `.env`
+   - Update `EXPO_PUBLIC_API_BASE_URL` with your network IP:
+     ```
+     EXPO_PUBLIC_API_BASE_URL=http://YOUR_NETWORK_IP:3000/api
+     ```
+   - For mobile testing: Replace `YOUR_NETWORK_IP` with your computer's IP address
+   - For development: Use `http://localhost:3000/api`
+
+2. **Backend Configuration**:
+   - The `backend/.env` file is already configured with MongoDB Atlas credentials
+   - No changes needed unless you want to use a different database
+
+### Step 2: Configure MongoDB Atlas (ONE TIME ONLY)
 
 IMPORTANT: You MUST do this first or the backend won't connect!
 
@@ -27,7 +42,7 @@ IMPORTANT: You MUST do this first or the backend won't connect!
 6. Click **"Confirm"**
 7. **Wait 1-2 minutes** for changes to take effect
 
-### Step 2: Start the Backend Server
+### Step 3: Start the Backend Server
 
 **Terminal 1**:
 
