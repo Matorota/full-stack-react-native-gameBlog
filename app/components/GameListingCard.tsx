@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -20,13 +19,14 @@ import { useListings } from "../contexts/ListingContext";
 interface GameListingCardProps {
   listing: Listing;
   onPress: () => void;
+  onEdit?: (id: string) => void;
 }
 
 export default function GameListingCard({
   listing,
   onPress,
+  onEdit,
 }: GameListingCardProps) {
-  const router = useRouter();
   const { currentUser, deleteListing } = useListings();
   const [expanded, setExpanded] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -64,7 +64,11 @@ export default function GameListingCard({
   };
 
   const handleEdit = () => {
-    router.push(`/edit-game/${listing.id}`);
+    if (onEdit) {
+      onEdit(listing.id);
+    } else {
+      console.warn("No edit handler provided");
+    }
   };
 
   const handleDelete = () => {
@@ -106,10 +110,8 @@ export default function GameListingCard({
         className="bg-slate-800 rounded-2xl shadow-lg border border-slate-700 overflow-hidden mb-4"
         activeOpacity={0.9}
       >
-        {/* Main Card Content */}
         <View className="p-5">
           <View className="flex-row">
-            {/* Game Image */}
             <View className="w-20 h-20 mr-4">
               {listing.images?.[0] ? (
                 <Image
@@ -124,7 +126,6 @@ export default function GameListingCard({
               )}
             </View>
 
-            {/* Game Info */}
             <View className="flex-1">
               <Text
                 className="text-lg font-bold text-white mb-1"
@@ -148,7 +149,6 @@ export default function GameListingCard({
             </View>
           </View>
 
-          {/* Contact Info */}
           <View className="flex-row items-center mt-3">
             <Ionicons name="call" size={14} color="#10B981" />
             <Text className="text-emerald-400 text-sm ml-2">
@@ -157,7 +157,6 @@ export default function GameListingCard({
           </View>
         </View>
 
-        {/* Expandable Actions */}
         {expanded && (
           <View className="bg-slate-700/50 px-5 py-4 border-t border-slate-600">
             <View className="flex-row justify-end space-x-3">
@@ -200,7 +199,6 @@ export default function GameListingCard({
               </TouchableOpacity>
             </View>
 
-            {/* Game ID */}
             <View className="mt-3 pt-3 border-t border-slate-600">
               <Text className="text-slate-500 text-xs">
                 ID: {listing.id.slice(0, 8)}...

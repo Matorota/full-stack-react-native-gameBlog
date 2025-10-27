@@ -6,11 +6,9 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
 let db;
 let collection;
 
@@ -29,7 +27,6 @@ const connectToMongoDB = async () => {
   }
 };
 
-// Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
     status: "OK",
@@ -39,21 +36,18 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Get all games with optional filters
 app.get("/api/games", async (req, res) => {
   try {
     const { minPrice, maxPrice, search } = req.query;
 
     let filter = {};
 
-    // Price filtering
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = minPrice;
       if (maxPrice) filter.price.$lte = maxPrice;
     }
 
-    // Search filtering
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: "i" } },
@@ -105,12 +99,10 @@ app.get("/api/games/:id", async (req, res) => {
   }
 });
 
-// Create new game
 app.post("/api/games", async (req, res) => {
   try {
     const gameData = req.body;
 
-    // Validate required fields
     if (!gameData.name || !gameData.description || !gameData.price) {
       return res.status(400).json({
         success: false,
@@ -138,13 +130,11 @@ app.post("/api/games", async (req, res) => {
   }
 });
 
-// Update game
 app.put("/api/games/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
 
-    // Remove _id from updates if present
     delete updates._id;
 
     const result = await collection.updateOne(
@@ -176,7 +166,6 @@ app.put("/api/games/:id", async (req, res) => {
   }
 });
 
-// Delete game
 app.delete("/api/games/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -205,7 +194,6 @@ app.delete("/api/games/:id", async (req, res) => {
   }
 });
 
-// Search games
 app.get("/api/games/search/:query", async (req, res) => {
   try {
     const { query } = req.params;
@@ -235,7 +223,6 @@ app.get("/api/games/search/:query", async (req, res) => {
   }
 });
 
-// Get statistics
 app.get("/api/stats", async (req, res) => {
   try {
     const games = await collection.find({}).toArray();
@@ -271,7 +258,6 @@ app.get("/api/stats", async (req, res) => {
   }
 });
 
-// Start server
 const startServer = async () => {
   await connectToMongoDB();
 

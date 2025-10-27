@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { useListings } from "../contexts/ListingContext";
 import GameHubMongoService from "../services/GameHubMongoService";
 import ConnectionStatusIndicator from "./ConnectionStatusIndicator";
+import { useSafeNavigation } from "../hooks/useSafeNavigation";
 
-export default function AppHeader() {
-  const router = useRouter();
+interface AppHeaderProps {
+  onManageGames?: () => void;
+  onAddGames?: () => void;
+}
+
+export default function AppHeader({
+  onManageGames,
+  onAddGames,
+}: AppHeaderProps = {}) {
   const { filteredListings, currentUser } = useListings();
+  const { navigateToAddGame, navigateToManageGames, canNavigate } =
+    useSafeNavigation();
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [isTestingConnection, setIsTestingConnection] = useState(false);
 
@@ -56,7 +65,7 @@ export default function AppHeader() {
           </View>
 
           <TouchableOpacity
-            onPress={() => router.push("/add-mongo-game")}
+            onPress={() => onAddGames && onAddGames()}
             className="p-3 rounded-xl bg-slate-700/50"
           >
             <Ionicons name="add" size={22} color="#10B981" />
@@ -82,7 +91,12 @@ export default function AppHeader() {
               <TouchableOpacity
                 onPress={() => {
                   setShowSettingsModal(false);
-                  router.push("/mongo-games-manager");
+                  if (canNavigate) {
+                    navigateToManageGames();
+                  } else {
+                    console.log("Navigation not available - using fallback");
+                    onManageGames && onManageGames();
+                  }
                 }}
                 className="flex-row items-center justify-between py-6 px-8 bg-slate-700 rounded-xl shadow-sm border border-slate-600 mb-2"
               >
@@ -104,7 +118,12 @@ export default function AppHeader() {
               <TouchableOpacity
                 onPress={() => {
                   setShowSettingsModal(false);
-                  router.push("/add-mongo-game");
+                  if (canNavigate) {
+                    navigateToAddGame();
+                  } else {
+                    console.log("Navigation not available - using fallback");
+                    onAddGames && onAddGames();
+                  }
                 }}
                 className="flex-row items-center justify-between py-6 px-8 bg-slate-700 rounded-xl shadow-sm border border-slate-600 mb-2"
               >

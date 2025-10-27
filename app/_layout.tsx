@@ -1,11 +1,14 @@
 import { Stack } from "expo-router";
 import { ListingProvider } from "./contexts/ListingContext";
+import NavigationErrorBoundary from "./components/NavigationErrorBoundary";
 import "./global.css";
 
 export default function RootLayout() {
   return (
-    <ListingProvider>
-      <Stack screenOptions={{ headerShown: false }} />
-    </ListingProvider>
+    <NavigationErrorBoundary>
+      <ListingProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </ListingProvider>
+    </NavigationErrorBoundary>
   );
 }

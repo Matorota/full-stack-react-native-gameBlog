@@ -14,22 +14,20 @@ export interface Listing {
   updatedAt: Date;
   userId?: string;
   condition?: "new" | "like_new" | "good" | "fair" | "poor";
-  platform?: string; // Gaming platform (PC, PS5, Xbox, etc.)
-  genre?: string; // Game genre
+  platform?: string;
+  genre?: string;
 }
 
-// MongoDB Blog Game structure (matches your existing data)
 export interface BlogGame {
-  _id?: string; // Optional for new documents, MongoDB generates ObjectId
+  _id?: string;
   name: string;
   description: string;
   price: string;
   img: string;
   contacts_nr: string;
-  filter?: string; // Filter field from your MongoDB data
+  filter?: string;
 }
 
-// MongoDB Blog Game with ObjectId (for internal MongoDB operations)
 export interface BlogGameDocument {
   _id?: import("mongodb").ObjectId;
   name: string;
@@ -37,10 +35,45 @@ export interface BlogGameDocument {
   price: string;
   img: string;
   contacts_nr: string;
-  filter?: string; // Filter field from your MongoDB data
+  filter?: string;
 }
 
-// Adapter functions to convert between BlogGame and Listing
+const mapFilterToCategory = (filter?: string): Category => {
+  if (!filter) return Category.GAMES;
+
+  const lowerFilter = filter.toLowerCase();
+  switch (lowerFilter) {
+    case "games":
+    case "game":
+      return Category.GAMES;
+    case "consoles":
+    case "console":
+      return Category.CONSOLES;
+    case "accessories":
+    case "accessory":
+      return Category.ACCESSORIES;
+    case "pc_components":
+    case "pc components":
+    case "pc":
+      return Category.PC_COMPONENTS;
+    case "merchandise":
+      return Category.MERCHANDISE;
+    case "collectibles":
+    case "collectible":
+      return Category.COLLECTIBLES;
+    case "digital":
+      return Category.DIGITAL;
+    case "action":
+    case "strategy":
+    case "rpg":
+    case "fps":
+    case "adventure":
+      return Category.GAMES; // Map game genres to GAMES category
+    default:
+      return Category.OTHER;
+  }
+};
+
 export const blogGameToListing = (blogGame: BlogGame): Listing => ({
   id: blogGame._id || "",
   title: blogGame.name,
@@ -48,16 +81,16 @@ export const blogGameToListing = (blogGame: BlogGame): Listing => ({
   price: parseFloat(blogGame.price) || 0,
   images: [blogGame.img],
   contact: {
-    name: "Game Seller", // Default since not in BlogGame
+    name: "Game Seller",
     phone: blogGame.contacts_nr,
-    email: "contact@example.com", // Default since not in BlogGame
+    email: "contact@example.com",
   },
-  category: Category.GAMES, // Default to games category
+  category: mapFilterToCategory(blogGame.filter),
   createdAt: new Date(),
   updatedAt: new Date(),
   condition: "good" as const,
-  platform: "PC", // Default platform
-  genre: "Action", // Default genre
+  platform: "PC",
+  genre: blogGame.filter || "Action",
 });
 
 export const listingToBlogGame = (listing: Listing): Omit<BlogGame, "_id"> => ({
@@ -93,23 +126,20 @@ export interface ListingContextType {
   searchQuery: string;
   currentUser: User | null;
 
-  // CRUD operations (now async for MongoDB support)
+  // SIMPLE CRUD
   addListing: (
     listing: Omit<Listing, "id" | "createdAt" | "updatedAt">
   ) => Promise<void>;
   updateListing: (id: string, updates: Partial<Listing>) => Promise<void>;
   deleteListing: (id: string) => Promise<void>;
 
-  // Filtering and search
   setSelectedCategory: (category: Category | "all") => void;
   setSearchQuery: (query: string) => void;
 
-  // Authentication (bonus)
   login: (email: string, password: string) => Promise<boolean>;
   register: (user: Omit<User, "id">, password: string) => Promise<boolean>;
   logout: () => void;
 
-  // Remember me (bonus)
   rememberMe: boolean;
   setRememberMe: (remember: boolean) => void;
 }

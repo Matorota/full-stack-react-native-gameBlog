@@ -28,7 +28,6 @@ export default function AddGamePage() {
   });
 
   const handleSubmit = async () => {
-    // Validate form
     if (!formData.name.trim()) {
       Alert.alert("Error", "Game name is required");
       return;
@@ -55,7 +54,6 @@ export default function AddGamePage() {
     setLoading(true);
 
     try {
-      // Convert form data to Listing format for the context
       const listingData = {
         title: formData.name,
         description: formData.description,
@@ -81,7 +79,6 @@ export default function AddGamePage() {
         },
       ]);
 
-      // Reset form
       setFormData({
         name: "",
         description: "",
@@ -101,7 +98,6 @@ export default function AddGamePage() {
   return (
     <ScrollView className="flex-1 bg-slate-900">
       <View className="p-8">
-        {/* Header */}
         <View className="mb-10">
           <TouchableOpacity
             onPress={() => router.back()}
@@ -118,9 +114,7 @@ export default function AddGamePage() {
           </Text>
         </View>
 
-        {/* Form */}
         <View className="bg-slate-800 rounded-2xl shadow-lg p-10 space-y-8 border border-slate-700">
-          {/* Game Name */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Game Name *
@@ -135,7 +129,6 @@ export default function AddGamePage() {
             />
           </View>
 
-          {/* Description */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Description *
@@ -155,7 +148,6 @@ export default function AddGamePage() {
             />
           </View>
 
-          {/* Price */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Price (€) *
@@ -170,7 +162,6 @@ export default function AddGamePage() {
             />
           </View>
 
-          {/* Image URL */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Image URL
@@ -204,7 +195,6 @@ export default function AddGamePage() {
             )}
           </View>
 
-          {/* Contact Number */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Contact Number *
@@ -221,7 +211,6 @@ export default function AddGamePage() {
             />
           </View>
 
-          {/* Category */}
           <View>
             <Text className="text-white font-semibold mb-4 text-lg">
               Category
@@ -251,7 +240,6 @@ export default function AddGamePage() {
             </View>
           </View>
 
-          {/* Submit Button */}
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={loading}

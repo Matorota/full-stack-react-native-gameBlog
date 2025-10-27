@@ -80,7 +80,6 @@ export default function EditGamePage() {
     setLoading(true);
 
     try {
-      // Convert form data to updates
       const updates = {
         title: formData.name,
         description: formData.description,
@@ -121,7 +120,6 @@ export default function EditGamePage() {
   return (
     <ScrollView className="flex-1 bg-slate-900">
       <View className="p-10">
-        {/* Header */}
         <View className="mb-8">
           <TouchableOpacity
             onPress={() => router.back()}
@@ -135,9 +133,7 @@ export default function EditGamePage() {
           </Text>
         </View>
 
-        {/* Form */}
         <View className="bg-slate-800 rounded-xl shadow-sm p-10 space-y-8">
-          {/* Game Name */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Game Name *
@@ -152,7 +148,6 @@ export default function EditGamePage() {
             />
           </View>
 
-          {/* Description */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Description *
@@ -172,7 +167,6 @@ export default function EditGamePage() {
             />
           </View>
 
-          {/* Price */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Price (€) *
@@ -187,7 +181,6 @@ export default function EditGamePage() {
             />
           </View>
 
-          {/* Image URL */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Image URL
@@ -219,7 +212,6 @@ export default function EditGamePage() {
             )}
           </View>
 
-          {/* Contact Number */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Contact Number *
@@ -236,7 +228,6 @@ export default function EditGamePage() {
             />
           </View>
 
-          {/* Category */}
           <View>
             <Text className="text-white font-semibold mb-3 text-lg">
               Category
@@ -266,7 +257,6 @@ export default function EditGamePage() {
             </View>
           </View>
 
-          {/* Submit Button */}
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={loading}
@@ -289,10 +279,9 @@ export default function EditGamePage() {
           </TouchableOpacity>
         </View>
 
-        {/* Game Info */}
         <View className="mt-10 bg-slate-800 rounded-xl p-6 border border-slate-700">
           <Text className="text-emerald-400 font-semibold mb-2 text-lg">
-            ℹ️ Game Info
+            Game Info
           </Text>
           <Text className="text-slate-300 text-base mb-2">
             <Text className="font-semibold">Original ID:</Text> {game.id}

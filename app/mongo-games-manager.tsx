@@ -23,7 +23,6 @@ export default function MongoGamesPage() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // The listings will be automatically refreshed through the context
     setTimeout(() => setRefreshing(false), 1000);
   };
 
@@ -123,7 +122,6 @@ export default function MongoGamesPage() {
               >
                 <View className="p-10">
                   <View className="flex-row">
-                    {/* Game Image */}
                     <View className="w-28 h-28 mr-8">
                       {listing.images && listing.images[0] ? (
                         <Image
@@ -140,7 +138,6 @@ export default function MongoGamesPage() {
                       )}
                     </View>
 
-                    {/* Game Info */}
                     <View className="flex-1">
                       <Text className="text-xl font-bold text-white mb-3">
                         {listing.title}
@@ -164,7 +161,6 @@ export default function MongoGamesPage() {
                     </View>
                   </View>
 
-                  {/* Action Buttons */}
                   <View className="flex-row justify-between mt-8 mx-4">
                     <TouchableOpacity
                       onPress={() => router.push(`/edit-game/${listing.id}`)}
@@ -206,7 +202,6 @@ export default function MongoGamesPage() {
                     </TouchableOpacity>
                   </View>
 
-                  {/* Metadata */}
                   <View className="mt-8 pt-6 border-t border-slate-600">
                     <View className="flex-row justify-between items-center">
                       <View className="bg-slate-700 px-3 py-1 rounded-full">

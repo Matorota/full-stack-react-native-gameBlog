@@ -17,10 +17,8 @@ import {
 } from "../types";
 import GameHubMongoService from "../services/GameHubMongoService";
 
-// Context
 const ListingContext = createContext<ListingContextType | undefined>(undefined);
 
-// State interface
 interface State {
   listings: Listing[];
   filteredListings: Listing[];
@@ -30,7 +28,6 @@ interface State {
   rememberMe: boolean;
 }
 
-// Actions
 type Action =
   | { type: "SET_LISTINGS"; payload: Listing[] }
   | { type: "ADD_LISTING"; payload: Listing }
@@ -45,7 +42,6 @@ type Action =
   | { type: "SET_USER"; payload: User | null }
   | { type: "SET_REMEMBER_ME"; payload: boolean };
 
-// Initial state - start with empty array, will load from MongoDB
 const initialState: State = {
   listings: [],
   filteredListings: [],
@@ -147,7 +143,6 @@ function listingReducer(state: State, action: Action): State {
   }
 }
 
-// Helper function to filter listings
 function filterListings(
   listings: Listing[],
   category: Category | "all",
@@ -155,12 +150,10 @@ function filterListings(
 ): Listing[] {
   let filtered = listings;
 
-  // Filter by category
   if (category !== "all") {
     filtered = filtered.filter((listing) => listing.category === category);
   }
 
-  // Filter by search query - enhanced for gaming
   if (searchQuery.trim()) {
     const query = searchQuery.toLowerCase();
     filtered = filtered.filter(
@@ -177,7 +170,6 @@ function filterListings(
   return filtered;
 }
 
-// Provider component
 interface ListingProviderProps {
   children: ReactNode;
 }
@@ -185,7 +177,6 @@ interface ListingProviderProps {
 export function ListingProvider({ children }: ListingProviderProps) {
   const [state, dispatch] = useReducer(listingReducer, initialState);
 
-  // Load data from MongoDB and AsyncStorage on app start
   useEffect(() => {
     loadPersistedData();
     loadMongoData();
@@ -195,7 +186,6 @@ export function ListingProvider({ children }: ListingProviderProps) {
     try {
       const mongoService = GameHubMongoService.getInstance();
 
-      // Connect to backend API (no credentials needed - backend handles MongoDB)
       const connected = await mongoService.connect();
 
       if (connected) {
@@ -356,8 +346,6 @@ export function ListingProvider({ children }: ListingProviderProps) {
     },
 
     login: async (email, password) => {
-      // TODO: Implement actual authentication
-      // For now, create a mock gamer user
       const mockUser: User = {
         id: generateId(),
         name: "GameMaster",
@@ -369,7 +357,6 @@ export function ListingProvider({ children }: ListingProviderProps) {
     },
 
     register: async (userData, password) => {
-      // TODO: Implement actual registration
       const newUser: User = {
         ...userData,
         id: generateId(),
@@ -395,7 +382,6 @@ export function ListingProvider({ children }: ListingProviderProps) {
   );
 }
 
-// Hook to use the context
 export function useListings(): ListingContextType {
   const context = useContext(ListingContext);
   if (context === undefined) {
