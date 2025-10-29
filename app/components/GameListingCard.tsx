@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
@@ -14,22 +7,17 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { Listing } from "../types";
-import { useListings } from "../contexts/ListingContext";
 
 interface GameListingCardProps {
   listing: Listing;
   onPress: () => void;
-  onEdit?: (id: string) => void;
 }
 
 export default function GameListingCard({
   listing,
   onPress,
-  onEdit,
 }: GameListingCardProps) {
-  const { currentUser, deleteListing } = useListings();
   const [expanded, setExpanded] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -63,36 +51,14 @@ export default function GameListingCard({
     return targetDate.toLocaleDateString();
   };
 
-  const handleEdit = () => {
-    if (onEdit) {
-      onEdit(listing.id);
-    } else {
-      console.warn("No edit handler provided");
-    }
-  };
-
-  const handleDelete = () => {
+  const handleBuy = () => {
     Alert.alert(
-      "Delete Game",
-      `Are you sure you want to delete "${listing.title}"?`,
+      "Contact Seller",
+      `Contact details for "${listing.title}":\n\nPhone: ${listing.contact.phone}\nEmail: ${listing.contact.email}\n\nPrice: ${formatPrice(listing.price)}`,
       [
         { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            setDeleting(true);
-            try {
-              await deleteListing(listing.id);
-              Alert.alert("Success", "Game deleted successfully!");
-            } catch (error) {
-              Alert.alert("Error", "Failed to delete game.");
-            } finally {
-              setDeleting(false);
-              setExpanded(false);
-            }
-          },
-        },
+        { text: "Call", onPress: () => console.log("Call seller") },
+        { text: "OK", style: "default" },
       ]
     );
   };
@@ -159,50 +125,35 @@ export default function GameListingCard({
 
         {expanded && (
           <View className="bg-slate-700/50 px-5 py-4 border-t border-slate-600">
-            <View className="flex-row justify-end space-x-3">
+            <View className="flex-row justify-center">
               <TouchableOpacity
-                onPress={handleEdit}
-                className="bg-slate-600 px-5 py-3 rounded-xl border border-slate-500"
+                onPress={handleBuy}
+                className="bg-emerald-500 px-8 py-4 rounded-xl flex-1 max-w-xs"
               >
-                <View className="flex-row items-center">
-                  <Ionicons name="pencil" size={16} color="#94a3b8" />
-                  <Text className="text-slate-300 text-sm font-medium ml-2">
-                    Edit
+                <View className="flex-row items-center justify-center">
+                  <Ionicons name="call" size={18} color="white" />
+                  <Text className="text-white text-lg font-semibold ml-2">
+                    Buy Now
                   </Text>
                 </View>
               </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={handleDelete}
-                disabled={deleting}
-                className={`px-5 py-3 rounded-xl border ${
-                  deleting
-                    ? "bg-slate-500 border-slate-400"
-                    : "bg-red-500/20 border-red-500/50"
-                }`}
-              >
-                {deleting ? (
-                  <View className="flex-row items-center">
-                    <ActivityIndicator size="small" color="#94a3b8" />
-                    <Text className="text-slate-400 text-sm font-medium ml-2">
-                      Deleting...
-                    </Text>
-                  </View>
-                ) : (
-                  <View className="flex-row items-center">
-                    <Ionicons name="trash" size={16} color="#ef4444" />
-                    <Text className="text-red-400 text-sm font-medium ml-2">
-                      Delete
-                    </Text>
-                  </View>
-                )}
-              </TouchableOpacity>
             </View>
 
-            <View className="mt-3 pt-3 border-t border-slate-600">
-              <Text className="text-slate-500 text-xs">
-                ID: {listing.id.slice(0, 8)}...
-              </Text>
+            <View className="mt-4 pt-3 border-t border-slate-600">
+              <View className="flex-row justify-between items-center">
+                <View>
+                  <Text className="text-slate-300 text-sm">Contact:</Text>
+                  <Text className="text-emerald-400 text-base font-medium">
+                    {listing.contact.phone}
+                  </Text>
+                </View>
+                <View>
+                  <Text className="text-slate-300 text-sm">Posted:</Text>
+                  <Text className="text-slate-400 text-sm">
+                    {formatTimeAgo(listing.createdAt)}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
         )}

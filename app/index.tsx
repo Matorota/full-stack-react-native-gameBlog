@@ -1,11 +1,5 @@
-import React from "react";
-import { View } from "react-native";
-import GameMarketplace from "./components/GameMarketplace";
+import { Redirect } from "expo-router";
 
 export default function Index() {
-  return (
-    <View className="flex-1">
-      <GameMarketplace />
-    </View>
-  );
+  return <Redirect href="/welcome" />;
 }

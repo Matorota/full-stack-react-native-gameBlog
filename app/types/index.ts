@@ -113,10 +113,30 @@ export enum Category {
 }
 
 export interface User {
-  id: string;
+  _id?: string;
   name: string;
+  surname: string;
   email: string;
-  phone: string;
+  password?: string; // Don't include in frontend state
+}
+
+export interface AuthUser {
+  _id: string;
+  name: string;
+  surname: string;
+  email: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterData {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
 }
 
 export interface ListingContextType {
@@ -124,7 +144,8 @@ export interface ListingContextType {
   filteredListings: Listing[];
   selectedCategory: Category | "all";
   searchQuery: string;
-  currentUser: User | null;
+  currentUser: AuthUser | null;
+  isAuthenticated: boolean;
 
   // SIMPLE CRUD
   addListing: (
@@ -136,9 +157,14 @@ export interface ListingContextType {
   setSelectedCategory: (category: Category | "all") => void;
   setSearchQuery: (query: string) => void;
 
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (user: Omit<User, "id">, password: string) => Promise<boolean>;
+  // Authentication
+  login: (credentials: LoginCredentials) => Promise<boolean>;
+  register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string
+  ) => Promise<boolean>;
 
   rememberMe: boolean;
   setRememberMe: (remember: boolean) => void;

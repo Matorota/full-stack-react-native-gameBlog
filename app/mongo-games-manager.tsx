@@ -12,7 +12,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useListings } from "./contexts/ListingContext";
+import { useListingContext } from "./contexts/ListingContext";
+
+const useListings = () => {
+  return useListingContext();
+};
 import { Listing } from "./types";
 
 export default function MongoGamesPage() {

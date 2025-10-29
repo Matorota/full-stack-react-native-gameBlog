@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useListings } from "../contexts/ListingContext";
+import { useRouter } from "expo-router";
 import { Listing, Category } from "../types";
+import { useListingContext } from "../contexts/ListingContext";
 import GameListingCard from "./GameListingCard";
 import GameSearchBar from "./GameSearchBar";
 import GameEmptyState from "./GameEmptyState";
 import AppHeader from "./AppHeader";
-import CategoryFilter from "./CategoryFilter";
-
-type Screen = "home" | "detail" | "form" | "auth" | "menu";
+import SimpleFilter from "./SimpleFilter";
 
 export default function GameMarketplace() {
   const {
@@ -17,31 +16,40 @@ export default function GameMarketplace() {
     selectedCategory,
     setSelectedCategory,
     currentUser,
-  } = useListings();
-  const [currentScreen, setCurrentScreen] = useState<Screen>("home");
+  } = useListingContext();
+  const router = useRouter();
 
   const handleListingPress = (listing: Listing) => {
     console.log("Listing pressed:", listing.title);
+  };
+
+  const handleManageGames = () => {
+    router.push("/mongo-games-manager");
+  };
+
+  const handleAddGames = () => {
+    router.push("/add-mongo-game");
   };
 
   return (
     <SafeAreaView className="flex-1 bg-slate-900">
       <StatusBar style="light" />
 
-      <AppHeader />
+      <AppHeader
+        onManageGames={handleManageGames}
+        onAddGames={handleAddGames}
+      />
 
       <GameSearchBar />
 
-      <CategoryFilter
+      <SimpleFilter
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
       />
 
       <ScrollView className="flex-1 px-6 pt-6">
         {filteredListings.length === 0 ? (
-          <GameEmptyState
-            onAddListing={() => console.log("Add game from empty state")}
-          />
+          <GameEmptyState onAddListing={handleAddGames} />
         ) : (
           <View className="space-y-4">
             {filteredListings.map((listing: Listing) => (
@@ -49,7 +57,6 @@ export default function GameMarketplace() {
                 key={listing.id}
                 listing={listing}
                 onPress={() => handleListingPress(listing)}
-                onEdit={() => console.log("Edit game - navigation coming soon")}
               />
             ))}
           </View>

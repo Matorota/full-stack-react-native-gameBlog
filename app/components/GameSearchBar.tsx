@@ -1,10 +1,10 @@
 import React from "react";
 import { View, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useListings } from "../contexts/ListingContext";
+import { useListingContext } from "../contexts/ListingContext";
 
 export default function GameSearchBar() {
-  const { searchQuery, setSearchQuery } = useListings();
+  const { searchQuery, setSearchQuery } = useListingContext();
 
   const clearSearch = () => {
     setSearchQuery("");

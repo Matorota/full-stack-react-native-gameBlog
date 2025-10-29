@@ -22,7 +22,6 @@ class GameHubMongoService {
     return GameHubMongoService.instance;
   }
 
-  // Get connection status for UI display
   getConnectionStatus(): {
     status: "connecting" | "connected" | "disconnected" | "error";
     error: string | null;
@@ -45,7 +44,6 @@ class GameHubMongoService {
       console.log("Connecting to GameHub Backend API...");
       console.log("URL:", this.baseUrl);
 
-      // Test the connection by checking health endpoint
       const response = await fetch(`${this.baseUrl}/health`);
 
       if (!response.ok) {
@@ -79,7 +77,6 @@ class GameHubMongoService {
     console.log(" Disconnected from Backend API");
   }
 
-  // Get all games with optional filters
   async getListings(filters?: {
     category?: string;
     platform?: string;
@@ -113,7 +110,6 @@ class GameHubMongoService {
 
       console.log(`Loaded ${blogGames.length} games from backend`);
 
-      // Convert to Listing format
       return blogGames.map((doc: any) => {
         const blogGame: BlogGame = {
           ...doc,
@@ -127,7 +123,6 @@ class GameHubMongoService {
     }
   }
 
-  // Add a new game
   async createListing(
     listing: Omit<Listing, "id" | "createdAt" | "updatedAt">
   ): Promise<Listing> {

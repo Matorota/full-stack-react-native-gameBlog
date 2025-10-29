@@ -10,13 +10,20 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { useListings } from "../contexts/ListingContext";
+import * as ListingContext from "../contexts/ListingContext";
 import { Category, Listing } from "../types";
 
 export default function EditGamePage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { listings, updateListing } = useListings();
+  const { listings, updateListing } = (ListingContext as any).useListings
+    ? (ListingContext as any).useListings()
+    : {
+        listings: [] as any[],
+        updateListing: async () => {
+          throw new Error("ListingContext.useListings is not available");
+        },
+      };
 
   const [loading, setLoading] = useState(false);
   const [game, setGame] = useState<Listing | null>(null);
@@ -31,7 +38,7 @@ export default function EditGamePage() {
 
   useEffect(() => {
     if (id) {
-      const foundGame = listings.find((listing) => listing.id === id);
+      const foundGame = listings.find((listing: Listing) => listing.id === id);
       if (foundGame) {
         setGame(foundGame);
         setFormData({

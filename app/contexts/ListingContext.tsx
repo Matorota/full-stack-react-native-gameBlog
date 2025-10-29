@@ -9,13 +9,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Listing,
   Category,
-  User,
+  AuthUser,
+  LoginCredentials,
+  RegisterData,
   ListingContextType,
   BlogGame,
   blogGameToListing,
   listingToBlogGame,
 } from "../types";
 import GameHubMongoService from "../services/GameHubMongoService";
+import UserAuthService from "../services/UserAuthService";
 
 const ListingContext = createContext<ListingContextType | undefined>(undefined);
 
@@ -24,7 +27,7 @@ interface State {
   filteredListings: Listing[];
   selectedCategory: Category | "all";
   searchQuery: string;
-  currentUser: User | null;
+  currentUser: AuthUser | null;
   rememberMe: boolean;
 }
 
@@ -39,7 +42,7 @@ type Action =
   | { type: "SET_CATEGORY"; payload: Category | "all" }
   | { type: "SET_SEARCH_QUERY"; payload: string }
   | { type: "SET_FILTERED_LISTINGS"; payload: Listing[] }
-  | { type: "SET_USER"; payload: User | null }
+  | { type: "SET_USER"; payload: AuthUser | null }
   | { type: "SET_REMEMBER_ME"; payload: boolean };
 
 const initialState: State = {
@@ -182,6 +185,11 @@ export function ListingProvider({ children }: ListingProviderProps) {
     loadMongoData();
   }, []);
 
+  // Save data when user state changes
+  useEffect(() => {
+    savePersistedData();
+  }, [state.currentUser, state.rememberMe]);
+
   const loadMongoData = async () => {
     try {
       const mongoService = GameHubMongoService.getInstance();
@@ -250,18 +258,17 @@ export function ListingProvider({ children }: ListingProviderProps) {
     }
   };
 
-  // Generate unique ID
   const generateId = (): string => {
     return Date.now().toString() + Math.random().toString(36).substr(2, 9);
   };
 
-  // Context value
   const contextValue: ListingContextType = {
     listings: state.listings,
     filteredListings: state.filteredListings,
     selectedCategory: state.selectedCategory,
     searchQuery: state.searchQuery,
     currentUser: state.currentUser,
+    isAuthenticated: !!state.currentUser,
     rememberMe: state.rememberMe,
 
     addListing: async (listingData) => {
@@ -279,7 +286,7 @@ export function ListingProvider({ children }: ListingProviderProps) {
             id: generateId(),
             createdAt: new Date(),
             updatedAt: new Date(),
-            userId: state.currentUser?.id,
+            userId: state.currentUser?._id,
           };
           dispatch({ type: "ADD_LISTING", payload: newListing });
           console.log("Blog game added locally:", newListing.title);
@@ -291,7 +298,7 @@ export function ListingProvider({ children }: ListingProviderProps) {
           id: generateId(),
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: state.currentUser?.id,
+          userId: state.currentUser?._id,
         };
         dispatch({ type: "ADD_LISTING", payload: newListing });
       }
@@ -345,24 +352,54 @@ export function ListingProvider({ children }: ListingProviderProps) {
       dispatch({ type: "SET_SEARCH_QUERY", payload: query });
     },
 
-    login: async (email, password) => {
-      const mockUser: User = {
-        id: generateId(),
-        name: "GameMaster",
-        email,
-        phone: "+370 600 00000",
-      };
-      dispatch({ type: "SET_USER", payload: mockUser });
-      return true;
+    login: async (credentials: LoginCredentials) => {
+      try {
+        const authService = UserAuthService.getInstance();
+        const user = await authService.login(credentials);
+
+        if (user) {
+          dispatch({ type: "SET_USER", payload: user });
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error("Login error in context:", error);
+        return false;
+      }
     },
 
-    register: async (userData, password) => {
-      const newUser: User = {
-        ...userData,
-        id: generateId(),
-      };
-      dispatch({ type: "SET_USER", payload: newUser });
-      return true;
+    register: async (userData: RegisterData) => {
+      try {
+        const authService = UserAuthService.getInstance();
+        const user = await authService.register(userData);
+
+        if (user) {
+          dispatch({ type: "SET_USER", payload: user });
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error("Registration error in context:", error);
+        return false;
+      }
+    },
+
+    changePassword: async (currentPassword: string, newPassword: string) => {
+      try {
+        if (!state.currentUser?._id) {
+          return false;
+        }
+
+        const authService = UserAuthService.getInstance();
+        return await authService.changePassword(
+          state.currentUser._id,
+          currentPassword,
+          newPassword
+        );
+      } catch (error) {
+        console.error("Change password error in context:", error);
+        return false;
+      }
     },
 
     logout: () => {
@@ -382,10 +419,10 @@ export function ListingProvider({ children }: ListingProviderProps) {
   );
 }
 
-export function useListings(): ListingContextType {
+export function useListingContext(): ListingContextType {
   const context = useContext(ListingContext);
   if (context === undefined) {
-    throw new Error("useListings must be used within a ListingProvider");
+    throw new Error("useListingContext must be used within a ListingProvider");
   }
   return context;
 }

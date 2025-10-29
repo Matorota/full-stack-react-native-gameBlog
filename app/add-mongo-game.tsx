@@ -10,12 +10,12 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useListings } from "./contexts/ListingContext";
+import { useListingContext } from "./contexts/ListingContext";
 import { Category } from "./types";
 
 export default function AddGamePage() {
   const router = useRouter();
-  const { addListing } = useListings();
+  const { addListing } = useListingContext();
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
