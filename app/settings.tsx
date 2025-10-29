@@ -133,6 +133,25 @@ export default function Settings() {
           </TouchableOpacity>
         </View>
 
+        {/* Test Connection Section */}
+        <View className="mb-6">
+          <Text className="text-white text-base font-semibold mb-3">
+            Database
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/test-connection")}
+            className="bg-slate-800 rounded-lg p-3 mb-4"
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center">
+                <Ionicons name="server" size={20} color="#10b981" />
+                <Text className="text-white text-sm ml-3">Test Connection</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color="#64748b" />
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {/* Logout Section */}
         <View className="mb-4">
           <TouchableOpacity

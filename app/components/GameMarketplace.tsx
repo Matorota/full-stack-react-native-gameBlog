@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, SafeAreaView, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import { Listing, Category } from "../types";
@@ -24,10 +24,32 @@ export default function GameMarketplace() {
   };
 
   const handleManageGames = () => {
+    if (!currentUser) {
+      Alert.alert(
+        "Access Restricted",
+        "You need to sign in to manage games. Please log in to access this feature.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Sign In", onPress: () => router.push("/login") },
+        ]
+      );
+      return;
+    }
     router.push("/mongo-games-manager");
   };
 
   const handleAddGames = () => {
+    if (!currentUser) {
+      Alert.alert(
+        "Access Restricted",
+        "You need to sign in to add games. Please log in to access this feature.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Sign In", onPress: () => router.push("/login") },
+        ]
+      );
+      return;
+    }
     router.push("/add-mongo-game");
   };
 

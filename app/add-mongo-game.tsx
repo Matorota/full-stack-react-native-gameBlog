@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import { Category } from "./types";
 
 export default function AddGamePage() {
   const router = useRouter();
-  const { addListing } = useListingContext();
+  const { addListing, currentUser } = useListingContext();
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,6 +26,19 @@ export default function AddGamePage() {
     contacts_nr: "",
     category: Category.GAMES,
   });
+
+  useEffect(() => {
+    if (!currentUser) {
+      Alert.alert(
+        "Access Restricted",
+        "You need to sign in to add games. Please log in to access this feature.",
+        [
+          { text: "Go to Login", onPress: () => router.replace("/login") },
+          { text: "Go Home", onPress: () => router.replace("/home") },
+        ]
+      );
+    }
+  }, [currentUser, router]);
 
   const handleSubmit = async () => {
     if (!formData.name.trim()) {

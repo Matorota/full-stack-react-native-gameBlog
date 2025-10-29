@@ -1,7 +1,3 @@
-/**
- * Navigation utility functions for the GameHub app
- */
-
 import { useRouter } from "expo-router";
 
 export const useAppNavigation = () => {
@@ -16,6 +12,7 @@ export const useAppNavigation = () => {
   const navigateToMain = {
     home: () => router.push("/home"),
     settings: () => router.push("/settings"),
+    testConnection: () => router.push("/test-connection"),
   };
 
   const navigateToAdmin = {
@@ -25,7 +22,8 @@ export const useAppNavigation = () => {
   };
 
   const goBack = () => router.back();
-  const replace = (route: string) => router.replace(route);
+  const replace = (route: Parameters<typeof router.replace>[0]) =>
+    router.replace(route);
 
   return {
     navigateToAuth,
@@ -45,6 +43,7 @@ export const NavigationRoutes = {
   // Main routes
   HOME: "/home",
   SETTINGS: "/settings",
+  TEST_CONNECTION: "/test-connection",
 
   // Admin routes
   MANAGE_GAMES: "/mongo-games-manager",

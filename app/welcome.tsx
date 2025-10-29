@@ -7,7 +7,7 @@ export default function WelcomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-slate-900">
       <View className="flex-1 px-8">
-        {/* Header Section */}
+        {" "}
         <View className="flex-1 justify-center items-center">
           <View className="mb-16">
             <Text className="text-5xl font-bold text-white text-center mb-6">
@@ -21,8 +21,6 @@ export default function WelcomeScreen() {
             </Text>
           </View>
         </View>
-
-        {/* Buttons Section */}
         <View className="pb-12">
           <View className="mb-6">
             <Link href="/login" asChild>

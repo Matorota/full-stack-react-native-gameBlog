@@ -147,7 +147,6 @@ export interface ListingContextType {
   currentUser: AuthUser | null;
   isAuthenticated: boolean;
 
-  // SIMPLE CRUD
   addListing: (
     listing: Omit<Listing, "id" | "createdAt" | "updatedAt">
   ) => Promise<void>;

@@ -21,9 +21,23 @@ import { Listing } from "./types";
 
 export default function MongoGamesPage() {
   const router = useRouter();
-  const { listings, deleteListing } = useListings();
+  const { listings, deleteListing, currentUser } = useListings();
   const [refreshing, setRefreshing] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!currentUser) {
+      Alert.alert(
+        "Access Restricted",
+        "You need to sign in to manage games. Please log in to access this feature.",
+        [
+          { text: "Go to Login", onPress: () => router.replace("/login") },
+          { text: "Go Home", onPress: () => router.replace("/home") },
+        ]
+      );
+    }
+  }, [currentUser, router]);
 
   const onRefresh = async () => {
     setRefreshing(true);

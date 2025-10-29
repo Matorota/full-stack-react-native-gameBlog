@@ -147,7 +147,6 @@ export default function RegisterScreen() {
             </Text>
           </Pressable>
 
-          {/* Links */}
           <View className="items-center">
             <View className="flex-row justify-center mb-4">
               <Text className="text-slate-400 text-base">

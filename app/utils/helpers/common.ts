@@ -1,7 +1,3 @@
-/**
- * Common utility functions for the GameHub app
- */
-
 export const formatPrice = (price: number): string => {
   return `$${price.toFixed(2)}`;
 };
@@ -25,15 +21,12 @@ export const capitalizeFirstLetter = (text: string): string => {
 };
 
 export const formatPhoneNumber = (phone: string): string => {
-  // Remove all non-numeric characters
   const numbers = phone.replace(/\D/g, "");
 
-  // Format as (XXX) XXX-XXXX for US numbers
   if (numbers.length === 10) {
     return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(6)}`;
   }
 
-  // Return original if not a standard format
   return phone;
 };
 
@@ -45,7 +38,7 @@ export const debounce = <T extends (...args: any[]) => any>(
   func: T,
   delay: number
 ): ((...args: Parameters<T>) => void) => {
-  let timeoutId: NodeJS.Timeout;
+  let timeoutId: ReturnType<typeof setTimeout>;
 
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
