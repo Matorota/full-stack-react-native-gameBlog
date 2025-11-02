@@ -10,20 +10,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import * as ListingContext from "../contexts/ListingContext";
+import { useListingContext } from "../contexts/ListingContext";
 import { Category, Listing } from "../types";
 
 export default function EditGamePage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { listings, updateListing } = (ListingContext as any).useListings
-    ? (ListingContext as any).useListings()
-    : {
-        listings: [] as any[],
-        updateListing: async () => {
-          throw new Error("ListingContext.useListings is not available");
-        },
-      };
+  const { listings, updateListing } = useListingContext();
 
   const [loading, setLoading] = useState(false);
   const [game, setGame] = useState<Listing | null>(null);
