@@ -88,7 +88,7 @@ export default function AddGamePage() {
       Alert.alert("Success", "Game added successfully!", [
         {
           text: "OK",
-          onPress: () => router.push("/"),
+          onPress: () => router.push("/home"),
         },
       ]);
 
